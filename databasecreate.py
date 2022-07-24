@@ -3,6 +3,7 @@ from peewee import IntegrityError
 from dbbaseinit import CompanyDB
 from dbbaseinit import CarDB
 from dbbaseinit import OrderDB
+from dbbaseinit import Driver
 from dbbaseinit import db
 from datetime import datetime
 from datetime import date
@@ -29,8 +30,26 @@ class CreateDB:
         """Создание новой базы данных."""
         with db:
             db.create_tables(
-                [CompanyDB, CarDB, OrderDB], safe=True
+                [CompanyDB, CarDB, OrderDB, Driver], safe=True
             )
+
+    @classmethod
+    def driver_create(
+            cls,
+            name: str = '',
+            job: str = '',
+            company_id: int = None
+    ) -> None:
+        try:
+            with db:
+                new = CompanyDB(
+                    name=name,
+                    job=job,
+                    company_id=company_id
+                )
+                new.save()
+        except IntegrityError as err:
+            print('запись водителя с таким именем уже есть. ', err)
 
     @classmethod
     def company_create(
@@ -189,6 +208,21 @@ class CreateDB:
                 mobile=mobile
             ).where(CompanyDB.id == id)
             upd.execute()
+
+    @classmethod
+    def update_client_driver(
+            cls,
+            id: int,
+            driver_name: str = '',
+            driver_job: str = ''
+    ):
+        with db:
+            upd = CompanyDB.update(
+                driver_name=driver_name,
+                driver_job=driver_job
+            ).where(CompanyDB.id == id)
+            upd.execute()
+
 
 
 if __name__ == "__main__":

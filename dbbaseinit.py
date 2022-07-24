@@ -23,11 +23,18 @@ class CompanyDB(BaseModel):
     address = TextField(null=True, default=None)
     telefone = TextField(null=True, default=None)
     mobile = TextField(null=True, default=None)
-    driver_name = TextField(null=True, default=None)
-    driver_job = TextField(null=True, default=None)
 
     class Meta:
         table_name = 'company_tbl'
+
+
+class Driver(BaseModel):
+    name = TextField(null=True, default=None, unique=True)
+    job = TextField(null=True, default=None)
+    company_id = ForeignKeyField(CompanyDB)
+
+    class Meta:
+        table_name = 'driver_tbl'
 
 
 class CarDB(BaseModel):
