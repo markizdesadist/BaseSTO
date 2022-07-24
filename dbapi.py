@@ -2,7 +2,7 @@ from typing import Any
 
 from dbbaseinit import CompanyDB
 from dbbaseinit import CarDB
-from dbbaseinit import OrderDB
+from dbbaseinit import OrderDB, Driver
 from dbbaseinit import db
 from databasecreate import CreateDB
 
@@ -25,10 +25,7 @@ class APIAxiomDB:
                         temp.full_name,
                         temp.address,
                         temp.pan_code,
-                        temp.telefone,
-                        temp.mobile,
-                        temp.driver_name,
-                        temp.driver_job
+                        temp.telefone
             ]
             return temp
 
@@ -45,9 +42,7 @@ class APIAxiomDB:
                 temp.address,
                 temp.pan_code,
                 temp.telefone,
-                temp.mobile,
-                temp.driver_name,
-                temp.driver_job
+                temp.mobile
             ]
             return temp
 
@@ -217,28 +212,52 @@ class APIAxiomDB:
             temp = OrderDB.select().count()
         return temp
 
+    @classmethod
+    def get_driver(cls, name):
+        with db:
+            if isinstance(name, int):
+                temp = Driver.get(Driver.id == OrderDB.get(OrderDB.id == name).driver_id)
+            else:
+                temp = Driver.get(Driver.name == name)
+            return temp
+
+
+    @classmethod
+    def get_list_driver(cls):
+        temp_list = []
+        with db:
+            for elem in Driver.select():
+                temp_list.append(elem.name)
+        return temp_list
+
 
 if __name__ == '__main__':
+    pass
     NEW = CreateDB()
-    # NEW.update_prefix(5)
-    # NEW.change_car(4, brand='МАЗ', model='4431', number='32-15')
 
-    # NEW.car_create(
-    #     name='MAZ',
-    #     model='6422',
-    #     number='34-15',
-    #     company_id=2
-    # )
-
+    # # NEW.update_prefix(5)
+    # # NEW.change_car(4, brand='МАЗ', model='4431', number='32-15')
+    #
+    # # NEW.car_create(
+    # #     name='MAZ',
+    # #     model='6422',
+    # #     number='34-15',
+    # #     company_id=2
+    # # )
+    #
     new_act = APIAxiomDB()
+    a = new_act.get_list_driver()
+    print(a)
+    print('b'in a)
     # print(new_act.count_act())
 
-    a = new_act.get_client_from_order(1)
-    print(a)
-    b = new_act.get_car_from_order(1)[1]
-    print(b)
-    c = new_act.get_client_list_car('SGP')
-    print(c)
-    d = new_act.get_client_list_order_from_name('SGP')
-    for elem in d:
-        print(elem)
+    # a = new_act.get_client_from_order(1)
+    # print(a)
+    # b = new_act.get_car_from_order(1)[1]
+    # print(b)
+    # c = new_act.get_client_list_car('SGP')
+    # print(c)
+    # d = new_act.get_client_list_order_from_name('SGP')
+    # for elem in d:
+    #     print(elem)
+

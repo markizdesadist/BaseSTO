@@ -4,8 +4,10 @@ from datetime import datetime
 
 
 class LogoFrame:
-    def __int__(self):
+    def __init__(self):
         self.frame = QtWidgets.QFrame()
+        self.txt_label_logo = QtWidgets.QLabel(self.frame)
+        self.timeEdit = QtWidgets.QTimeEdit(self.frame)
         
     def set_frame(self, frame):
         self.frame = QtWidgets.QFrame(frame)

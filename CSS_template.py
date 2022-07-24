@@ -57,7 +57,7 @@ class CSS:
         line_2.setFrameShadow(QtWidgets.QFrame.Sunken)
         line_2.setObjectName("line_15")
 
-        pic = QPicture()
+        # pic = QPicture()
         # lcdNumber = QtWidgets.QLCDNumber(frame)
         # lcdNumber.setGeometry(QtCore.QRect(10, 10, 101, 81))
         # lcdNumber.setObjectName("lcdNumber_2")
@@ -84,6 +84,32 @@ class CSS:
         #     # txt_label_order_number.setText('0')
         #     # txt_label_order_number_prefix.setText('A')
 
+    @classmethod
+    def set_label_car(cls, frame):
+        label_car_brand_and_number = QtWidgets.QLabel(frame)
+        label_car_brand_and_number.setGeometry(QtCore.QRect(10, 350, 120, 30))
+        label_car_brand_and_number.setFont(CSS.set_font(12, False, 50))
+        label_car_brand_and_number.setAutoFillBackground(False)
+        label_car_brand_and_number.setObjectName("label_car_brand_and_number")
+
+        label_car_vin_code = QtWidgets.QLabel(frame)
+        label_car_vin_code.setGeometry(QtCore.QRect(10, 430, 120, 30))
+        label_car_vin_code.setFont(CSS.set_font(12, False, 50))
+        label_car_vin_code.setAutoFillBackground(False)
+        label_car_vin_code.setObjectName("label_car_vin_code")
+
+        label_car_model = QtWidgets.QLabel(frame)
+        label_car_model.setGeometry(QtCore.QRect(10, 390, 120, 30))
+        label_car_model.setFont(CSS.set_font(12, False, 50))
+        label_car_model.setAutoFillBackground(False)
+        label_car_model.setObjectName("label_car_model")
+
+        _translate = QtCore.QCoreApplication.translate
+
+        label_car_brand_and_number.setText(_translate("MainWindow", "Машина"))
+        label_car_vin_code.setText(_translate("MainWindow", "VIN-код "))
+        label_car_model.setText(_translate("MainWindow", "Модель"))
+
 
 class BaseClassWidget:
     """Базовый класс для создания виджета ListWidget."""
@@ -94,6 +120,7 @@ class BaseClassWidget:
         self.text = ''
         self.listWidget_list = QtWidgets.QListWidget()
         self.spis = ['None']
+        self.query = APIAxiomDB()
 
     def set(self, text):
         self.listWidget_list.addItem(text)

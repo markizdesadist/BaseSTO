@@ -48,8 +48,8 @@ class Client():
         print(':)')
 
     def check_client_name(self):
-        new = APIAxiomDB()
-        if self.txt_edit_lineEdit_client_name.text() in new.get_list_company():
+        query = APIAxiomDB()
+        if self.txt_edit_lineEdit_client_name.text() in query.get_list_company():
             print('error name')
         else:
             self.save_new_client()
