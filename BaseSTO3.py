@@ -24,6 +24,7 @@ from list_widget_frame import ListWOrder, ListWClient, ListWCar
 from CSS_template import CSS
 from logo_frame import LogoFrame
 from databasecreate import CreateDB
+from dbapi import APIAxiomDB
 
 
 class Ui_MainWindow(object):
@@ -61,7 +62,7 @@ class Ui_MainWindow(object):
     @classmethod
     def close_act(cls, num):
         new = CreateDB()
-        if new.isClose(num) == False:
+        if not new.isClose(num):
             new.close_order(num, True)
             Ui_MainWindow.order.btn_pushButton_order_close.setStyleSheet("background-color: rgb(85, 170, 0);")
             Ui_MainWindow.order.btn_pushButton_order_close.setText('Открыть акт')
@@ -92,6 +93,10 @@ class Ui_MainWindow(object):
         Ui_MainWindow.client.txt_edit_lineEdit_client_phone.setText(temp.telefone)
         Ui_MainWindow.client.txt_edit_lineEdit_client_mobile_phone.setText(temp.mobile)
         Ui_MainWindow.client.current_id = temp.id
+        order_num = APIAxiomDB()
+        Ui_MainWindow.order.txt_label_order_number.setText(str(order_num.count_act() + 1))
+        Ui_MainWindow.order.txt_label_order_number_prefix.setText('A')
+        Ui_MainWindow.order.current_id = None
 
     @classmethod
     def set_text_from_order(cls, item):
@@ -100,10 +105,14 @@ class Ui_MainWindow(object):
         """
 
         new = CreateDB()
+        driver = APIAxiomDB()
         temp = Ui_MainWindow.list_order.get_item_text_from_list(item)
 
         Ui_MainWindow.order.txt_label_order_number.setText(str(temp.id))
         Ui_MainWindow.order.txt_label_order_number_prefix.setText(temp.prefix)
+
+        Ui_MainWindow.order.txt_edit_lineEdit_client_owner_name.setText(driver.get_driver(temp.id).name)
+        Ui_MainWindow.order.txt_edit_lineEdit_client_job_title.setText(driver.get_driver(temp.id).job)
 
         Ui_MainWindow.order.current_id = temp.id
 
@@ -135,6 +144,10 @@ class Ui_MainWindow(object):
         Ui_MainWindow.car.txt_edit_lineEdit_car_model.setText(temp.model)
         Ui_MainWindow.car.txt_edit_lineEdit_car_vin_code.setText(temp.vin_code)
         Ui_MainWindow.car.current_id = temp.id
+        order_num = APIAxiomDB()
+        Ui_MainWindow.order.txt_label_order_number.setText(str(order_num.count_act() + 1))
+        Ui_MainWindow.order.txt_label_order_number_prefix.setText('A')
+        Ui_MainWindow.order.current_id = None
 
     def change_tab(self, tab):
         self.tabWidget.setCurrentIndex(tab)
@@ -361,6 +374,8 @@ class Ui_MainWindow(object):
 
 
 def Main():
+    NEW = CreateDB()
+    NEW.create_db()
     app = QApplication(sys.argv)
     MainWindow = QMainWindow()
     ui = Ui_MainWindow()

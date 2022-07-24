@@ -29,7 +29,7 @@ class CompanyDB(BaseModel):
 
 
 class Driver(BaseModel):
-    name = TextField(null=True, default=None, unique=True)
+    name = TextField(null=True, default=None)
     job = TextField(null=True, default=None)
     company_id = ForeignKeyField(CompanyDB)
 
@@ -58,6 +58,7 @@ class OrderDB(BaseModel):
     first_open = BooleanField(default=True)
     data_close = DateField(null=True, default=None)
     path_file = TextField(null=True, default=None)
+    driver_id = ForeignKeyField(Driver, null=True, default=None)
 
     class Meta:
         table_name = 'order_tbl'

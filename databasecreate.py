@@ -42,7 +42,7 @@ class CreateDB:
     ) -> None:
         try:
             with db:
-                new = CompanyDB(
+                new = Driver(
                     name=name,
                     job=job,
                     company_id=company_id
@@ -59,9 +59,7 @@ class CreateDB:
             address: str = '',
             pan_code: int = None,
             telefone: str = '',
-            mobile: str = '',
-            driver_name: str = '',
-            driver_job: str = ''
+            mobile: str = ''
     ) -> None:
         """Добавление нового клиента в базу данных."""
 
@@ -73,9 +71,7 @@ class CreateDB:
                     address=address,
                     pan_code=pan_code,
                     telefone=telefone,
-                    mobile=mobile,
-                    driver_name=driver_name,
-                    driver_job=driver_job
+                    mobile=mobile
                 )
                 new.save()
         except IntegrityError as err:
@@ -117,7 +113,8 @@ class CreateDB:
             closing_mark: bool = False,
             first_open: bool = False,
             data_close: date = None,
-            path_file: str = ''
+            path_file: str = '',
+            driver_id: int = None
     ) -> None:
         """Устанавливает новую запись об открытии нового акта в базу данных."""
 
@@ -131,7 +128,8 @@ class CreateDB:
                     closing_mark=closing_mark,
                     first_open=first_open,
                     data_close=data_close,
-                    path_file=path_file
+                    path_file=path_file,
+                    driver_id=driver_id
                 )
                 new.save()
         except IntegrityError as err:
@@ -224,137 +222,131 @@ class CreateDB:
             upd.execute()
 
 
-
 if __name__ == "__main__":
     NEW = CreateDB()
     NEW.create_db()
 
-    NEW.company_create(
-        name='BAMS',
-        full_name='BelAvtoMazServis',
-        address='Minsk',
-        pan_code=100100100,
-        mobile='',
-        driver_name='',
-        driver_job=''
-
-    )
-    NEW.company_create(
-        name='SGP',
-        full_name='ServisGarantPlus',
-        address='Minsk',
-        pan_code=230400400,
-        telefone='12-22-22',
-        driver_name='',
-        driver_job=''
-    )
-    NEW.company_create(
-        name='Gramd',
-        full_name='Grandmotors',
-        address='Mogilev',
-        pan_code=899411333,
-        telefone='12-22-22',
-        mobile='8029444-44-44'
-    )
-
-
-
-
-
-    NEW.car_create(
-        name='Volosiped',
-        model='Sprinter',
-        number='12-21',
-        vin_code='UZM123123',
-        company_id=1
-    )
-    NEW.car_create(
-        name='MAZ',
-        model='4371',
-        number='56-18',
-        vin_code='UZM437112',
-        company_id=1
-    )
-    NEW.car_create(
-        name='MAZ',
-        model='5336',
-        number='33-11',
-        vin_code='UZM5336004',
-        company_id=2
-    )
-    NEW.car_create(
-        name='MAZ',
-        model='6303',
-        number='32-16',
-        vin_code='UZM6303332',
-        company_id=3
-    )
-    NEW.car_create(
-        name='MAZ',
-        model='6422',
-        number='32-15',
-        vin_code='UZM6422A5',
-        company_id=2
-    )
-    NEW.car_create(
-        name='MAZ',
-        model='4371',
-        number='44-44',
-        vin_code='UZM4371005',
-        company_id=3
-    )
-
-
-
-
-    NEW.order_create(
-        car_id=5,
-        company_id=2,
-        prefix='A',
-        closing_mark=False,
-        first_open=False
-    )
-    NEW.order_create(
-        car_id=6,
-        company_id=3,
-        prefix='A',
-        data=datetime.now().date(),
-        closing_mark=False,
-        first_open=False,
-        data_close=None,
-        path_file='None'
-    )
-
-
-    NEW.order_create(
-        car_id=1,
-        company_id=1,
-        prefix='A',
-        data=datetime.now().date(),
-        closing_mark=False,
-        first_open=False,
-        data_close=None,
-        path_file='None'
-    )
-
-    NEW.order_create(
-        car_id=4,
-        company_id=3,
-        prefix='A',
-        data=datetime.now().date(),
-        closing_mark=False,
-        first_open=False,
-        data_close=None,
-        path_file='None'
-    )
-
-    NEW.order_create(
-        car_id=3,
-        company_id=2,
-        prefix='A',
-        data=datetime.now().date(),
-        closing_mark=False,
-        first_open=False,
-        data_close=None,
-        path_file='None'
-    )
+    # NEW.company_create(
+    #     name='BAMS',
+    #     full_name='BelAvtoMazServis',
+    #     address='Minsk',
+    #     pan_code=100100100,
+    #     mobile=''
+    # )
+    # NEW.company_create(
+    #     name='SGP',
+    #     full_name='ServisGarantPlus',
+    #     address='Minsk',
+    #     pan_code=230400400,
+    #     telefone='12-22-22'
+    # )
+    # NEW.company_create(
+    #     name='Gramd',
+    #     full_name='Grandmotors',
+    #     address='Mogilev',
+    #     pan_code=899411333,
+    #     telefone='12-22-22',
+    #     mobile='8029444-44-44'
+    # )
+    #
+    #
+    #
+    #
+    #
+    # NEW.car_create(
+    #     name='Volosiped',
+    #     model='Sprinter',
+    #     number='12-21',
+    #     vin_code='UZM123123',
+    #     company_id=1
+    # )
+    # NEW.car_create(
+    #     name='MAZ',
+    #     model='4371',
+    #     number='56-18',
+    #     vin_code='UZM437112',
+    #     company_id=1
+    # )
+    # NEW.car_create(
+    #     name='MAZ',
+    #     model='5336',
+    #     number='33-11',
+    #     vin_code='UZM5336004',
+    #     company_id=2
+    # )
+    # NEW.car_create(
+    #     name='MAZ',
+    #     model='6303',
+    #     number='32-16',
+    #     vin_code='UZM6303332',
+    #     company_id=3
+    # )
+    # NEW.car_create(
+    #     name='MAZ',
+    #     model='6422',
+    #     number='32-15',
+    #     vin_code='UZM6422A5',
+    #     company_id=2
+    # )
+    # NEW.car_create(
+    #     name='MAZ',
+    #     model='4371',
+    #     number='44-44',
+    #     vin_code='UZM4371005',
+    #     company_id=3
+    # )
+    #
+    #
+    #
+    #
+    # NEW.order_create(
+    #     car_id=5,
+    #     company_id=2,
+    #     prefix='A',
+    #     closing_mark=False,
+    #     first_open=False
+    # )
+    # NEW.order_create(
+    #     car_id=6,
+    #     company_id=3,
+    #     prefix='A',
+    #     data=datetime.now().date(),
+    #     closing_mark=False,
+    #     first_open=False,
+    #     data_close=None,
+    #     path_file='None'
+    # )
+    #
+    #
+    # NEW.order_create(
+    #     car_id=1,
+    #     company_id=1,
+    #     prefix='A',
+    #     data=datetime.now().date(),
+    #     closing_mark=False,
+    #     first_open=False,
+    #     data_close=None,
+    #     path_file='None'
+    # )
+    #
+    # NEW.order_create(
+    #     car_id=4,
+    #     company_id=3,
+    #     prefix='A',
+    #     data=datetime.now().date(),
+    #     closing_mark=False,
+    #     first_open=False,
+    #     data_close=None,
+    #     path_file='None'
+    # )
+    #
+    # NEW.order_create(
+    #     car_id=3,
+    #     company_id=2,
+    #     prefix='A',
+    #     data=datetime.now().date(),
+    #     closing_mark=False,
+    #     first_open=False,
+    #     data_close=None,
+    #     path_file='None'
+    # )

@@ -4,11 +4,11 @@ from dbapi import APIAxiomDB
 
 class ListWOrder(BaseClassWidget):
     text = 'Заказ-Наряд'
-    size = 250
+    size = 200
     spis = []
 
     def __int__(self):
-        super().__int__()
+        super(ListWOrder, self).__int__()
 
     def get_item_text_from_list(self, item):
         new = APIAxiomDB()
@@ -19,7 +19,7 @@ class ListWOrder(BaseClassWidget):
     def print(self):
         self.clear_items()
         new = APIAxiomDB()
-        temp = ['{}-{} : {}'.format(elem.id, elem.prefix, elem.data) for elem in new.get_list_order()]
+        temp = ['  {} - {}    : {}'.format(elem.id, elem.prefix, elem.data) for elem in new.get_list_order()]
         self.set_items(temp)
 
     def print_widget(self, name, foo='clt'):
@@ -27,19 +27,19 @@ class ListWOrder(BaseClassWidget):
         new = APIAxiomDB()
         temp = None
         if foo == 'clt':
-            temp = ['{}-{} : {}'.format(elem.id, elem.prefix, elem.data) for elem in new.get_client_list_order(name)]
+            temp = ['  {} - {}    : {}'.format(elem.id, elem.prefix, elem.data) for elem in new.get_client_list_order(name)]
         elif foo == 'car':
-            temp = ['{}-{} : {}'.format(elem.id, elem.prefix, elem.data) for elem in new.get_car_list_order(name)]
+            temp = ['  {} - {}    : {}'.format(elem.id, elem.prefix, elem.data) for elem in new.get_car_list_order(name)]
         self.set_items(temp)
 
 
 class ListWClient(BaseClassWidget):
     text = 'Клиент'
-    size = 290
+    size = 220
     spis = []
 
     def __int__(self):
-        super().__int__()
+        super(ListWClient, self).__int__()
 
     def print(self):
         self.clear_items()
@@ -67,23 +67,23 @@ class ListWClient(BaseClassWidget):
 
 class ListWCar(BaseClassWidget):
     text = 'Car'
-    size = 300
+    size = 420
     spis = ['maz', 'zil', 'volga', 'mazda', 'leksus']
 
     def __int__(self):
-        super().__int__()
+        super(ListWCar, self).__int__()
 
     def print(self):
         self.clear_items()
         new = APIAxiomDB()
-        temp = ['{} | №- {} | {}-{}'.format(elem.id, elem.number, elem.name, elem.model)
+        temp = ['{}  |  №- {} | {}-{}'.format(elem.id, elem.number, elem.name, elem.model)
                 for elem in new.get_list_car()]
         self.set_items(temp)
 
     def print_widget(self, name):
         self.clear_items()
         new = APIAxiomDB()
-        temp = ['{} | №- {} | {}-{}'.format(elem.id, elem.number, elem.name, elem.model)
+        temp = ['{}  |  №- {} | {}-{}'.format(elem.id, elem.number, elem.name, elem.model)
                 for elem in new.get_client_list_car(name)]
         self.set_items(temp)
 
