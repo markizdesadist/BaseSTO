@@ -1,6 +1,5 @@
 from PyQt5 import QtGui, QtWidgets, QtCore
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPicture, QPixmap
+from abc import ABC, abstractmethod
 
 from dbapi import APIAxiomDB
 
@@ -8,8 +7,8 @@ from dbapi import APIAxiomDB
 class CSS:
     """Шаблоны для повторяющихся элементов, шрифта, и др."""
 
-    def __int__(self):
-        self.btn_pushButton_refresh = QtWidgets.QPushButton()
+    def __init__(self):
+        self.btn_pushButton_refresh = None
 
     @classmethod
     def set_font(cls, size=12, bold=False, weight=0):
@@ -111,15 +110,24 @@ class CSS:
         label_car_model.setText(_translate("MainWindow", "Модель"))
 
 
-class BaseClassWidget:
+class BaseClassWidget(ABC):
     """Базовый класс для создания виджета ListWidget."""
 
-    def __int__(self):
-        self.frame = QtWidgets.QFrame()
-        self.size = 200
+    def __init__(self):
+        self.frame = None
+        self.gridLayoutWidget = None
+        self.gridLayout_listWidget = None
+        self.frame_label = None
+        self.label_list = None
+        self.frame_listWidget = None
+        self.listWidget_list = None
+        self.frame_btn = None
+        self.btn_pushButton_update = None
+
+        # self.size = 280
         self.text = ''
         self.listWidget_list = QtWidgets.QListWidget()
-        self.spis = ['None']
+        self.temp_list = []
         self.query = APIAxiomDB()
 
     def set(self, text):
@@ -213,8 +221,6 @@ class BaseClassWidget:
         self.gridLayout_listWidget.addWidget(self.frame_btn, 2, 0, 1, 1)
 
         self.add_action()
-
-
         self.retranslateUi()
 
     def set_item(self, text_a):
@@ -235,18 +241,22 @@ class BaseClassWidget:
         self.btn_pushButton_update.clicked.connect(lambda: self.print())
         # self.listWidget_list.clicked.connect(lambda : self.get_item_text_from_list(self.listWidget_list.currentItem()))
 
-    def get_item_text_from_list(self, item):
+    @abstractmethod
+    def get_item_text_from_list(self, *args):
         pass
 
+    @abstractmethod
     def print(self):
         """Переназначаемая функция. Очистка поля и добавление элементов списка в поле ListWidget."""
         pass
 
-    def print_widget(self, name):
+    @abstractmethod
+    def print_widget(self, *args):
         """Переназначаемая функция. Очистка поля и добавление элементов списка в соседствующие поля ListWidget."""
         pass
 
-    def print_one(self, id_num: int):
+    @abstractmethod
+    def print_one(self, *args):
         pass
 
     def retranslateUi(self):
@@ -255,3 +265,4 @@ class BaseClassWidget:
         self.label_list.setText(_translate("MainWindow", self.text))
         self.frame_btn.setStyleSheet(_translate("MainWindow", "background-color: rgb(85, 170, 0);"))
         self.btn_pushButton_update.setText(_translate("MainWindow", "Обновить"))
+        

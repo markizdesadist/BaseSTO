@@ -11,6 +11,7 @@
 import sys
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import QDateTime
 from PyQt5.QtWidgets import QApplication, QMainWindow
 
 from help_frame import Help
@@ -24,23 +25,24 @@ from list_widget_frame import ListWOrder, ListWClient, ListWCar
 from CSS_template import CSS
 from logo_frame import LogoFrame
 from databasecreate import CreateDB
+from dbapi import APIAxiomDB
 
 
-class Ui_MainWindow(object):
-    old_order = OldOrder()
-    client = Client()
-    car = Car()
-    order = Order()
-    help = Help()
-    btn_frame = BtnFrame()
-    menu = MenuBar()
-    list_client = ListWClient()
-    list_car = ListWCar()
-    list_order = ListWOrder()
-    logo_frame = LogoFrame()
+class Ui_MainWindow(QMainWindow):
+    old_order = None
+    client = None
+    car = None
+    order = None
+    help = None
+    btn_frame = None
+    menu = None
+    list_client = None
+    list_car = None
+    list_order = None
+    logo_frame = None
 
     def __int__(self):
-        pass
+        super(Ui_MainWindow, self).__int__()
 
     def add_action(self):
         Ui_MainWindow.btn_frame.btn_pushButton_help.clicked.connect(lambda: self.change_tab(4))
@@ -48,6 +50,7 @@ class Ui_MainWindow(object):
         Ui_MainWindow.order.btn_pushButton_new_car.clicked.connect(lambda: self.change_tab(2))
         Ui_MainWindow.order.btn_pushButton_new_client.clicked.connect(lambda: self.change_tab(1))
         Ui_MainWindow.car.btn_pushButton_new_client.clicked.connect(lambda: self.change_tab(1))
+        # Ui_MainWindow.old_order.btn_pushButton_data_choice.clicked.connect(lambda: self.print_old_order())
 
         Ui_MainWindow.list_client.listWidget_list.clicked.connect(
             lambda: self.set_text_from_client(Ui_MainWindow.list_client.listWidget_list.currentItem()))
@@ -60,13 +63,13 @@ class Ui_MainWindow(object):
 
     @classmethod
     def close_act(cls, num):
-        new = CreateDB()
-        if new.isClose(num) == False:
-            new.close_order(num, True)
+        query = CreateDB()
+        if not query.isClose(num):
+            query.close_order(num, True)
             Ui_MainWindow.order.btn_pushButton_order_close.setStyleSheet("background-color: rgb(85, 170, 0);")
             Ui_MainWindow.order.btn_pushButton_order_close.setText('Открыть акт')
         else:
-            new.close_order(num, False)
+            query.close_order(num, False)
             Ui_MainWindow.order.btn_pushButton_order_close.setStyleSheet("background-color: rgb(255, 170, 0);")
             Ui_MainWindow.order.btn_pushButton_order_close.setText('Закрыть акт')
 
@@ -75,23 +78,31 @@ class Ui_MainWindow(object):
         """Устанавливает клиента в лист заявки и лист клиента,
         выводит в виджеты order и car списки зависимых от клиента машин и актов
         """
-        temp = Ui_MainWindow.list_client.get_item_text_from_list(item)
 
-        Ui_MainWindow.list_order.print_widget(temp.id)
-        Ui_MainWindow.order.txt_label_client_name.setText(temp.full_name)
-        Ui_MainWindow.order.txt_label_client_identification_number.setText(str(temp.pan_code))
-        Ui_MainWindow.list_car.print_widget(temp.id)
+        query = APIAxiomDB()
+        client_item = Ui_MainWindow.list_client.get_item_text_from_list(item)
 
-        Ui_MainWindow.car.txt_label_client_identification_number.setText(str(temp.pan_code))
-        Ui_MainWindow.car.txt_label_client_name.setText(temp.full_name)
+        Ui_MainWindow.list_order.print_widget(client_item.id)
+        Ui_MainWindow.list_car.print_widget(client_item.id)
 
-        Ui_MainWindow.client.txt_edit_lineEdit_client_name.setText(temp.name)
-        Ui_MainWindow.client.txt_edit_textEdit_client_full_name.setText(temp.full_name)
-        Ui_MainWindow.client.txt_edit_textEdit_client_address.setText(temp.address)
-        Ui_MainWindow.client.txt_edit_lineEdit_client_identification_number.setText(str(temp.pan_code))
-        Ui_MainWindow.client.txt_edit_lineEdit_client_phone.setText(temp.telefone)
-        Ui_MainWindow.client.txt_edit_lineEdit_client_mobile_phone.setText(temp.mobile)
-        Ui_MainWindow.client.current_id = temp.id
+        Ui_MainWindow.order.txt_label_client_name.setText(client_item.full_name)
+        Ui_MainWindow.order.txt_label_client_identification_number.setText(str(client_item.pan_code))
+        Ui_MainWindow.order.txt_label_order_number.setText(str(query.count_act() + 1))
+        Ui_MainWindow.order.txt_label_order_number_prefix.setText('A')
+        Ui_MainWindow.order.current_id = None
+        Ui_MainWindow.order.txt_edit_lineEdit_client_owner_name.setText('')
+        Ui_MainWindow.order.txt_edit_lineEdit_client_job_title.setText('')
+
+        Ui_MainWindow.car.txt_label_client_name.setText(client_item.full_name)
+        Ui_MainWindow.car.txt_label_client_identification_number.setText(str(client_item.pan_code))
+
+        Ui_MainWindow.client.txt_edit_lineEdit_client_name.setText(client_item.name)
+        Ui_MainWindow.client.txt_edit_textEdit_client_full_name.setText(client_item.full_name)
+        Ui_MainWindow.client.txt_edit_textEdit_client_address.setText(client_item.address)
+        Ui_MainWindow.client.txt_edit_lineEdit_client_identification_number.setText(str(client_item.pan_code))
+        Ui_MainWindow.client.txt_edit_lineEdit_client_phone.setText(client_item.telefone)
+        Ui_MainWindow.client.txt_edit_lineEdit_client_mobile_phone.setText(client_item.mobile)
+        Ui_MainWindow.client.current_id = client_item.id
 
     @classmethod
     def set_text_from_order(cls, item):
@@ -100,21 +111,41 @@ class Ui_MainWindow(object):
         """
 
         new = CreateDB()
-        temp = Ui_MainWindow.list_order.get_item_text_from_list(item)
+        query = APIAxiomDB()
+        order_item = Ui_MainWindow.list_order.get_item_text_from_list(item)
+        driver = query.get_driver(order_item.id)
+        client_item = query.get_client_from_order(order_item.id)
+        car_item = query.get_car_from_order(order_item.id)
 
-        Ui_MainWindow.order.txt_label_order_number.setText(str(temp.id))
-        Ui_MainWindow.order.txt_label_order_number_prefix.setText(temp.prefix)
+        Ui_MainWindow.order.txt_label_order_number.setText(str(order_item.id))
+        Ui_MainWindow.order.txt_label_order_number_prefix.setText(order_item.prefix)
+        Ui_MainWindow.order.txt_label_client_name.setText(client_item.full_name)
+        Ui_MainWindow.order.txt_label_client_identification_number.setText(str(client_item.pan_code))
+        Ui_MainWindow.order.txt_label_brand.setText(car_item.name)
+        Ui_MainWindow.order.txt_label_car_number.setText(car_item.number)
+        Ui_MainWindow.order.txt_label_model.setText(car_item.model)
+        Ui_MainWindow.order.txt_label_vin_code.setText(car_item.vin_code)
+        Ui_MainWindow.order.txt_edit_lineEdit_client_owner_name.setText(driver.name)
+        Ui_MainWindow.order.txt_edit_lineEdit_client_job_title.setText(driver.job)
+        Ui_MainWindow.order.current_id = order_item.id
 
-        Ui_MainWindow.order.current_id = temp.id
-
-        if new.isClose(temp.id) == False:
+        if not new.isClose(order_item.id):
             Ui_MainWindow.order.btn_pushButton_order_close.setStyleSheet("background-color: rgb(255, 170, 0);")
             Ui_MainWindow.order.btn_pushButton_order_close.setText('Закрыть акт')
         else:
             Ui_MainWindow.order.btn_pushButton_order_close.setStyleSheet("background-color: rgb(85, 170, 0);")
             Ui_MainWindow.order.btn_pushButton_order_close.setText('Открыть акт')
-        Ui_MainWindow.list_car.print_one(temp.id)
-        Ui_MainWindow.list_client.print_one(temp.id)
+
+        Ui_MainWindow.list_car.print_one(order_item.id)
+        Ui_MainWindow.list_client.print_one(order_item.id)
+
+    # @classmethod
+    # def print_old_order(cls):
+    #     query = APIAxiomDB()
+    #     start = QDateTime(Ui_MainWindow.old_order.dateEdit_1.date()).toPyDateTime()
+    #     end = QDateTime(Ui_MainWindow.old_order.dateEdit.date()).toPyDateTime()
+    #     old_order_item_list = query.get_list_old_order(start=start, end=end)
+    #     Ui_MainWindow.old_order.add_order_to_list(old_order_item_list)
 
     @classmethod
     def set_text_from_car(cls, item):
@@ -122,27 +153,34 @@ class Ui_MainWindow(object):
         выводит в виджеты order списки зависимых от машины актов
         """
 
-        temp = Ui_MainWindow.list_car.get_item_text_from_list(item.text())
+        query = APIAxiomDB()
+        car_item = Ui_MainWindow.list_car.get_item_text_from_list(item.text())
 
-        Ui_MainWindow.order.txt_label_car_model.setText(temp.model)
-        Ui_MainWindow.order.txt_label_car_number.setText(temp.number)
-        Ui_MainWindow.order.txt_label_car_brand.setText(temp.name)
-        Ui_MainWindow.order.txt_label_car_vin_code.setText(temp.vin_code)
-        Ui_MainWindow.list_order.print_widget(temp.id, 'car')
+        Ui_MainWindow.list_order.print_widget(car_item.id, 'car')
 
-        Ui_MainWindow.car.txt_edit_lineEdit_car_brand.setText(temp.name)
-        Ui_MainWindow.car.txt_edit_lineEdit_car_number.setText(temp.number)
-        Ui_MainWindow.car.txt_edit_lineEdit_car_model.setText(temp.model)
-        Ui_MainWindow.car.txt_edit_lineEdit_car_vin_code.setText(temp.vin_code)
-        Ui_MainWindow.car.current_id = temp.id
+        Ui_MainWindow.order.txt_label_brand.setText(car_item.name)
+        Ui_MainWindow.order.txt_label_car_number.setText(car_item.number)
+        Ui_MainWindow.order.txt_label_model.setText(car_item.model)
+        Ui_MainWindow.order.txt_label_vin_code.setText(car_item.vin_code)
+        Ui_MainWindow.order.txt_label_order_number.setText(str(query.count_act() + 1))
+        Ui_MainWindow.order.txt_label_order_number_prefix.setText('A')
+        Ui_MainWindow.order.current_id = None
+        Ui_MainWindow.order.txt_edit_lineEdit_client_owner_name.setText('')
+        Ui_MainWindow.order.txt_edit_lineEdit_client_job_title.setText('')
+
+        Ui_MainWindow.car.txt_label_brand.setText(car_item.name)
+        Ui_MainWindow.car.txt_label_car_number.setText(car_item.number)
+        Ui_MainWindow.car.txt_label_model.setText(car_item.model)
+        Ui_MainWindow.car.txt_label_vin_code.setText(car_item.vin_code)
+        Ui_MainWindow.car.current_id = car_item.id
 
     def change_tab(self, tab):
         self.tabWidget.setCurrentIndex(tab)
         self.change_logo_text(tab)
 
-    def change_logo_text(self, ind):
+    def change_logo_text(self, index):
         Ui_MainWindow.logo_frame.txt_label_logo.clear()
-        Ui_MainWindow.logo_frame.txt_label_logo.setText(self.tabWidget.tabText(ind))
+        Ui_MainWindow.logo_frame.txt_label_logo.setText(self.tabWidget.tabText(index))
 
     def set_top_right_tab_widget(self, frame):
         self.tabWidget = QtWidgets.QTabWidget(frame)
@@ -175,9 +213,6 @@ class Ui_MainWindow(object):
         self.tabWidget.addTab(self.tab_help, "")
 
         self.tabWidget.setCurrentIndex(0)
-
-        # self.tabWidget.tabBarClicked.connect(lambda: self.click_tab(self.tabWidget.currentIndex()))
-
 
         return self.tabWidget
 
@@ -251,8 +286,6 @@ class Ui_MainWindow(object):
         self.gridLayout_listWidget.setVerticalSpacing(1)
         self.gridLayout_listWidget.setObjectName("gridLayout_listWidget")
 
-
-
         self.gridLayout_listWidget.addWidget(CSS.line_widget(self.gridLayoutWidget), 0, 0, 1, 1)
         self.gridLayout_listWidget.addWidget(Ui_MainWindow.list_client.set_frame(self.gridLayoutWidget), 0, 1, 1, 1)
         self.gridLayout_listWidget.addWidget(CSS.line_widget(self.gridLayoutWidget), 0, 2, 1, 1)
@@ -278,23 +311,72 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addLayout(self.RootLayout)
 
-    @classmethod
-    def window_create(cls, MainWindow):
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.setWindowModality(QtCore.Qt.ApplicationModal)
-        MainWindow.resize(1500, 800)
+    # def dialog(self):
+    #     def setupUi(self):
+    #         self.setObjectName("Dialog")
+    #         self.resize(400, 300)
+    #
+    #         self.buttonBox = QtWidgets.QDialogButtonBox(self)
+    #         self.buttonBox.setGeometry(QtCore.QRect(30, 265, 341, 32))
+    #         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
+    #         self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel | QtWidgets.QDialogButtonBox.Save)
+    #         self.buttonBox.setObjectName("buttonBox")
+    #
+    #         self.plainTextEdit = QtWidgets.QPlainTextEdit(self)
+    #         self.plainTextEdit.setGeometry(QtCore.QRect(60, 14, 321, 251))
+    #         self.plainTextEdit.setStyleSheet("background-color: rgb(215, 215, 215);")
+    #         self.plainTextEdit.setObjectName("plainTextEdit")
+    #
+    #         self.label = QtWidgets.QLabel(self)
+    #         self.label.setGeometry(QtCore.QRect(10, 20, 41, 41))
+    #         self.label.setStyleSheet("background-color: 'green';")
+    #         self.label.setFrameShape(QtWidgets.QFrame.WinPanel)
+    #         self.label.setFrameShadow(QtWidgets.QFrame.Raised)
+    #         self.label.setLineWidth(2)
+    #         self.label.setText("")
+    #         self.label.setObjectName("label")
+    #
+    #         self.retranslateUi()
+    #         self.buttonBox.accepted.connect(self.accept)  # type: ignore
+    #         self.buttonBox.rejected.connect(self.reject)  # type: ignore
+    #         QtCore.QMetaObject.connectSlotsByName(self)
+    #
+    #     def set_text(self, text, color='green'):
+    #         self.plainTextEdit.setPlainText(text)
+    #         self.label.setStyleSheet("background-color: " + color + ";")
+    #
+    #     def retranslateUi(self):
+    #         _translate = QtCore.QCoreApplication.translate
+    #         self.setWindowTitle(_translate("Dialog", "Dialog"))
+
+    def window_create(self):
+        self.setObjectName("MainWindow")
+        self.setWindowModality(QtCore.Qt.ApplicationModal)
+        self.resize(1500, 800)
 
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("photo.jpg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        MainWindow.setWindowIcon(icon)
+        self.setWindowIcon(icon)
 
-        MainWindow.setLayoutDirection(QtCore.Qt.LeftToRight)
-        MainWindow.setAutoFillBackground(True)
+        self.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.setAutoFillBackground(True)
 
-    def setupUi(self, MainWindow):
-        self.window_create(MainWindow)
+        Ui_MainWindow.old_order = OldOrder()
+        Ui_MainWindow.client = Client()
+        Ui_MainWindow.car = Car()
+        Ui_MainWindow.order = Order()
+        Ui_MainWindow.help = Help()
+        Ui_MainWindow.btn_frame = BtnFrame()
+        Ui_MainWindow.menu = MenuBar()
+        Ui_MainWindow.list_client = ListWClient()
+        Ui_MainWindow.list_car = ListWCar()
+        Ui_MainWindow.list_order = ListWOrder()
+        Ui_MainWindow.logo_frame = LogoFrame()
 
-        self.central_widget = QtWidgets.QWidget(MainWindow)
+    def setupUi(self):
+        self.window_create()
+
+        self.central_widget = QtWidgets.QWidget(self)
         self.central_widget.setStyleSheet("background-color: rgb(85, 170, 0);")
         self.central_widget.setObjectName("central_widget")
 
@@ -305,22 +387,20 @@ class Ui_MainWindow(object):
         Ui_MainWindow.car.set_frame(self.tab_new_car)
         Ui_MainWindow.old_order.set_frame(self.tab_old_order)
         Ui_MainWindow.help.set_body(self.tab_help)
-        Ui_MainWindow.menu.set_frame(MainWindow)
+        Ui_MainWindow.menu.set_frame(self)
 
         Ui_MainWindow.list_client.print()
 
-        MainWindow.setCentralWidget(self.central_widget)
+        self.setCentralWidget(self.central_widget)
 
+        self.retranslateUi()
         self.add_action()
-        self.retranslateUi(MainWindow)
 
-        # self.actionExit.triggered.connect(MainWindow.close) # type: ignore
+        QtCore.QMetaObject.connectSlotsByName(self)
 
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
-    def retranslateUi(self, MainWindow):
+    def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "BaseSTO"))
+        self.setWindowTitle(_translate("MainWindow", "BaseSTO"))
 
         self.tabWidget.setTabText(
             self.tabWidget.indexOf(self.tab_order),
@@ -362,10 +442,9 @@ class Ui_MainWindow(object):
 
 def Main():
     app = QApplication(sys.argv)
-    MainWindow = QMainWindow()
     ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
+    ui.setupUi()
+    ui.show()
     sys.exit(app.exec_())
 
 

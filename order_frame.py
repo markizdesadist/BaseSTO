@@ -46,9 +46,9 @@ class Order:
 			'model': self.txt_label_model,
 			'vin_code': self.txt_label_vin_code,
 			'order_number': self.txt_label_order_number,
-            'prefix': self.txt_label_order_number_prefix,
-	        'driver_name': self.txt_edit_lineEdit_client_owner_name,
-	        'job_title': self.txt_edit_lineEdit_client_job_title,
+			'prefix': self.txt_label_order_number_prefix,
+			'driver_name': self.txt_edit_lineEdit_client_owner_name,
+			'job_title': self.txt_edit_lineEdit_client_job_title,
 			'client_name': self.txt_label_client_name,
 			'client_unp': self.txt_label_client_identification_number,
 		}
@@ -153,7 +153,8 @@ class Order:
 		self.add_action()
 		self.retranslateUi()
 
-	def clear_txt(self, txt):
+	@classmethod
+	def clear_txt(cls, txt):
 		txt.clear()
 
 	def add_action(self):
@@ -414,32 +415,36 @@ class Order:
 		query = APIAxiomDB()
 
 		self.btn_pushButton_refresh.setText(_translate("MainWindow", "Очистить"))
-		self.checkBox_2_application_order.setText(_translate("MainWindow", " -  Заявка - Заказ"))
-		self.btn_pushButton_new_client.setText(_translate("MainWindow", "Новый\nклиент"))
-		self.txt_edit_lineEdit_client_owner_name.setText(_translate("MainWindow", "Фамилия И.О."))
-		self.label_client_job_title.setText(_translate("MainWindow", "Должность"))
-		self.btn_pushButton_car_part_choice.setText(_translate("MainWindow", "Запчасти"))
-		self.txt_label_order_number.setText(_translate("MainWindow", str(query.count_act() + 1)))
-		self.txt_label_brand.setText(_translate("MainWindow", "марка машины"))
-		self.btn_pushButton_order_close.setText(_translate("MainWindow", "Закрыть Акт"))
-		self.label_client_name.setText(_translate("MainWindow", "Клиент"))
-		self.txt_label_car_number.setText(_translate("MainWindow", "номер машины"))
 		self.btn_pushButton_car_car_choice.setText(_translate("MainWindow", "Машина"))
 		self.btn_pushButton_new_car.setText(_translate("MainWindow", "Новая\nмашина"))
 		self.btn_pushButton_print_order.setText(_translate("MainWindow", "Распечатать"))
+		self.btn_pushButton_new_client.setText(_translate("MainWindow", "Новый\nклиент"))
+		self.btn_pushButton_car_part_choice.setText(_translate("MainWindow", "Запчасти"))
+		self.btn_pushButton_order_close.setText(_translate("MainWindow", "Закрыть Акт"))
+
+		self.txt_label_order_number.setText(_translate("MainWindow", str(query.count_act() + 1)))
 		self.txt_label_order_number_prefix.setText(_translate("MainWindow", "А"))
-		self.checkBox_1_repair_request.setText(_translate("MainWindow", " -  Заявка - Заказ на ремонт"))
-		self.label_client_owner_name.setText(_translate("MainWindow", "ФИО заказчика"))
-		self.label_order_number.setText(_translate("MainWindow", "Заявка №"))
-		self.txt_label_client_name.setText(_translate("MainWindow", "название клиента"))
-		self.txt_label_model.setText(_translate("MainWindow", "модель машины"))
-		self.checkBox_4_internal_consumption.setText(_translate("MainWindow", " -  Внутренняя накладная"))
-		self.txt_edit_lineEdit_client_job_title.setText(_translate("MainWindow", "должность"))
-		self.checkBox_3_act_of_acceptance.setText(_translate("MainWindow", " -  Акт приёмки-сдачи"))
-		self.label_order_number_sep.setText(_translate("MainWindow", "-"))
-		self.txt_label_vin_code.setText(_translate("MainWindow", "VIN код машины"))
-		self.label_client_identification_number.setText(_translate("MainWindow", "УНП клиента"))
+		self.txt_label_client_name.setText(_translate("MainWindow", "Клиент"))
 		self.txt_label_client_identification_number.setText(_translate("MainWindow", "УНП клиента"))
+		self.txt_edit_lineEdit_client_owner_name.setText(_translate("MainWindow", ""))
+		self.txt_edit_lineEdit_client_job_title.setText(_translate("MainWindow", ""))
+		self.txt_label_brand.setText(_translate("MainWindow", "марка машины"))
+		self.txt_label_model.setText(_translate("MainWindow", "модель машины"))
+		self.txt_label_car_number.setText(_translate("MainWindow", "номер машины"))
+		self.txt_label_vin_code.setText(_translate("MainWindow", "VIN код машины"))
+
+		self.checkBox_1_repair_request.setText(_translate("MainWindow", " -  Заявка - Заказ на ремонт"))
+		self.checkBox_2_application_order.setText(_translate("MainWindow", " -  Заявка - Заказ"))
+		self.checkBox_3_act_of_acceptance.setText(_translate("MainWindow", " -  Акт приёмки-сдачи"))
+		self.checkBox_4_internal_consumption.setText(_translate("MainWindow", " -  Внутренняя накладная"))
+
+		self.label_order_number.setText(_translate("MainWindow", "Заявка №"))
+		self.label_order_number_sep.setText(_translate("MainWindow", "-"))
+		self.label_client_name.setText(_translate("MainWindow", "Клиент"))
+		self.label_client_identification_number.setText(_translate("MainWindow", "УНП клиента"))
+		self.label_client_owner_name.setText(_translate("MainWindow", "ФИО заказчика"))
+		self.label_client_job_title.setText(_translate("MainWindow", "Должность"))
+
 		self.dateEdit.setDisplayFormat(_translate("MainWindow", "d - MMMM - yyyy"))
 
 
