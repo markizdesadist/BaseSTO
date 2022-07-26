@@ -161,15 +161,17 @@ class Car:
         _translate = QtCore.QCoreApplication.translate
 
         self.btn_pushButton_new_client.setText(_translate("MainWindow", "Новый\nклиент"))
-        self.label_client_identification_number.setText(_translate("MainWindow", "УНП клиента"))
-        # self.btn_pushButton_car_part_choice.setText(_translate("MainWindow", "Запчасти"))
-        self.label_client_name.setText(_translate("MainWindow", "Клиент"))
-        # self.btn_pushButton_car_car_choice.setText(_translate("MainWindow", "Машина"))
         self.btn_pushButton_save.setText(_translate("MainWindow", "Сохранить"))
+        self.btn_pushButton_edit.setText(_translate("MainWindow", "Редакти\nровать\nданные\nмашины"))
+        # self.btn_pushButton_car_car_choice.setText(_translate("MainWindow", "Машина"))
+        # self.btn_pushButton_car_part_choice.setText(_translate("MainWindow", "Запчасти"))
+
+        self.label_client_name.setText(_translate("MainWindow", "Клиент"))
+        self.label_client_identification_number.setText(_translate("MainWindow", "УНП клиента"))
+
         self.txt_label_client_name.setText(_translate("MainWindow", "Владелец машины"))
         self.txt_label_client_identification_number.setText(_translate("MainWindow", "УНП клиента"))
         self.txt_label_brand.setText(_translate("MainWindow", "марка машины"))
         self.txt_label_car_number.setText(_translate("MainWindow", "Номер машины"))
         self.txt_label_model.setText(_translate("MainWindow", "модель машины"))
         self.txt_label_vin_code.setText(_translate("MainWindow", "VIN код машины"))
-        self.btn_pushButton_edit.setText(_translate("MainWindow", "Редакти\nровать\nданные\nмашины"))

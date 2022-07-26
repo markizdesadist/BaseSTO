@@ -4,9 +4,25 @@ from dbapi import APIAxiomDB
 from databasecreate import CreateDB
 
 
-class Client():
-    def __int__(self):
-        self.frame = QtWidgets.QFrame()
+class Client:
+    def __init__(self):
+        self.frame = None
+        self.btn_pushButton_smile = None
+        self.btn_pushButton_edit = None
+        self.btn_pushButton_save = None
+        self.txt_edit_lineEdit_client_name = None
+        self.txt_edit_textEdit_client_full_name = None
+        self.txt_edit_textEdit_client_address = None
+        self.txt_edit_lineEdit_client_identification_number = None
+        self.txt_edit_lineEdit_client_phone = None
+        self.txt_edit_lineEdit_client_mobile_phone = None
+        self.label_client_identification_number = None
+        self.label_client_name = None
+        self.label_client_address = None
+        self.label_client_full_name = None
+        self.label_client_phone = None
+        self.label_client_mobile_phone = None
+
         self.current_id = None
 
     def set_frame(self, frame):
@@ -26,7 +42,7 @@ class Client():
     def add_action(self):
         self.btn_pushButton_save.clicked.connect(lambda: self.check_client_name())
         self.btn_pushButton_edit.clicked.connect(lambda: self.edit_client())
-        self.btn_pushButton_smile.clicked.connect(lambda: self.smile_fun())
+        # self.btn_pushButton_smile.clicked.connect(lambda: self.smile_fun())
         self.btn_pushButton_edit.clicked.connect(lambda: self.edit_client())
 
     def edit_client(self):
@@ -43,9 +59,16 @@ class Client():
         except Exception as err:
             print(err)
 
-    @classmethod
-    def smile_fun(cls):
-        print(':)')
+    # @classmethod
+    # def smile_fun(cls):
+        # app = QtWidgets.QApplication(sys.argv)
+        # Dialog = QtWidgets.QDialog()
+        # ppw = PopUpWin()
+        # ppw.setupUi()
+        # ppw.set_text('Улыбнуться', 'green')
+        # ppw.show()
+        # sys.exit(app.exec_())
+        # pass
 
     def check_client_name(self):
         query = APIAxiomDB()
@@ -130,17 +153,15 @@ class Client():
         self.txt_edit_lineEdit_client_mobile_phone.setObjectName("txt_edit_lineEdit_client_mobile_phone")
 
     def set_label(self):
-
-
         self.label_client_identification_number = QtWidgets.QLabel(self.frame)
         self.label_client_identification_number.setGeometry(QtCore.QRect(10, 350, 120, 30))
         self.label_client_identification_number.setFont(CSS.set_font(12, False, 50))
         self.label_client_identification_number.setObjectName("label_client_identification_number")
 
-        self.label_client_name_2 = QtWidgets.QLabel(self.frame)
-        self.label_client_name_2.setGeometry(QtCore.QRect(10, 110, 120, 30))
-        self.label_client_name_2.setFont(CSS.set_font(12, False, 50))
-        self.label_client_name_2.setObjectName("label_client_name_2")
+        self.label_client_name = QtWidgets.QLabel(self.frame)
+        self.label_client_name.setGeometry(QtCore.QRect(10, 110, 120, 30))
+        self.label_client_name.setFont(CSS.set_font(12, False, 50))
+        self.label_client_name.setObjectName("label_client_name")
 
         self.label_client_address = QtWidgets.QLabel(self.frame)
         self.label_client_address.setGeometry(QtCore.QRect(10, 220, 120, 30))
@@ -166,28 +187,58 @@ class Client():
 
     def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
-        self.label_client_identification_number.setText(_translate("MainWindow", "УНП клиента"))
-        self.label_client_name_2.setText(_translate("MainWindow", "Клиент"))
-        self.label_client_address.setText(_translate("MainWindow", "Адрес почты"))
+
+        self.btn_pushButton_save.setText(_translate("MainWindow", "Сохранить"))
+        self.btn_pushButton_edit.setText(_translate("MainWindow", "Редакти\nровать\nданные\nклиента"))
+        self.btn_pushButton_smile.setText(_translate("MainWindow", "Улыбнуться"))
+
+        self.label_client_name.setText(_translate("MainWindow", "Клиент"))
         self.label_client_full_name.setText(_translate("MainWindow", "Название"))
+        self.label_client_identification_number.setText(_translate("MainWindow", "УНП клиента"))
+        self.label_client_address.setText(_translate("MainWindow", "Адрес почты"))
         self.label_client_phone.setText(_translate("MainWindow", "Телефон"))
         self.label_client_mobile_phone.setText(_translate("MainWindow", "Мобильный"))
-        self.btn_pushButton_save.setText(_translate("MainWindow", "Сохранить"))
+        
         self.txt_edit_lineEdit_client_name.setText(_translate("MainWindow", "клиент"))
-        self.txt_edit_textEdit_client_full_name.setHtml(_translate("MainWindow",
-                                                                   "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-                                                                   "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-                                                                   "p, li { white-space: pre-wrap; }\n"
-                                                                   "</style></head><body style=\" font-family:\'Droid Sans\'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-                                                                   "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">полное название клиента</span></p></body></html>"))
-        self.txt_edit_textEdit_client_address.setHtml(_translate("MainWindow",
-                                                                 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-                                                                 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-                                                                 "p, li { white-space: pre-wrap; }\n"
-                                                                 "</style></head><body style=\" font-family:\'Droid Sans\'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-                                                                 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">Адрес</span></p></body></html>"))
+        self.txt_edit_textEdit_client_full_name.setHtml(_translate(
+            "MainWindow",
+            "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+            "<html>"
+            "<head>"
+            "<meta name=\"qrichtext\" content=\"1\" />"
+            "<style type=\"text/css\">\n"
+            "p, li { white-space: pre-wrap; }\n"
+            "</style>"
+            "</head>"
+            "<body style=\" font-family:\'Droid Sans\'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+            "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; "
+            "-qt-block-indent:0; text-indent:0px;\">"
+            "<span style=\" font-size:10pt;\">полное название клиента</span>"
+            "</p>"
+            "</body>"
+            "</html>")
+        )
+        self.txt_edit_textEdit_client_address.setHtml(_translate(
+            "MainWindow",
+            "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+            "<html>"
+            "<head>"
+            "<meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+            "p, li { white-space: pre-wrap; }\n"
+            "</style>"
+            "</head>"
+            "<body style=\" font-family:\'Droid Sans\'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+            "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; "
+            "text-indent:0px;\">"
+            "<span style=\" font-size:10pt;\">Адрес</span>"
+            "</p>"
+            "</body>"
+            "</html>")
+        )
         self.txt_edit_lineEdit_client_identification_number.setText(_translate("MainWindow", "УНП клиента"))
         self.txt_edit_lineEdit_client_phone.setText(_translate("MainWindow", "городской телефон"))
         self.txt_edit_lineEdit_client_mobile_phone.setText(_translate("MainWindow", "мобильный номер клиента"))
-        self.btn_pushButton_edit.setText(_translate("MainWindow", "Редакти\nровать\nданные\nклиента"))
-        self.btn_pushButton_smile.setText(_translate("MainWindow", "Улыбнуться"))
+
+
+if __name__ == '__main__':
+    pass

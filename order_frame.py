@@ -5,6 +5,8 @@ from CSS_template import CSS
 from dbapi import APIAxiomDB
 from databasecreate import CreateDB
 from datetime import datetime
+import os.path
+from doc_parser import CreateFile
 
 
 class Order:
@@ -46,9 +48,9 @@ class Order:
 			'model': self.txt_label_model,
 			'vin_code': self.txt_label_vin_code,
 			'order_number': self.txt_label_order_number,
-            'prefix': self.txt_label_order_number_prefix,
-	        'driver_name': self.txt_edit_lineEdit_client_owner_name,
-	        'job_title': self.txt_edit_lineEdit_client_job_title,
+			'prefix': self.txt_label_order_number_prefix,
+			'driver_name': self.txt_edit_lineEdit_client_owner_name,
+			'job_title': self.txt_edit_lineEdit_client_job_title,
 			'client_name': self.txt_label_client_name,
 			'client_unp': self.txt_label_client_identification_number,
 		}
@@ -153,7 +155,8 @@ class Order:
 		self.add_action()
 		self.retranslateUi()
 
-	def clear_txt(self, txt):
+	@classmethod
+	def clear_txt(cls, txt):
 		txt.clear()
 
 	def add_action(self):
@@ -168,15 +171,18 @@ class Order:
 	def print(self):
 		new = CreateDB()
 		query = APIAxiomDB()
+		client_item = query.get_client_from_unp(int(self.txt_label_client_identification_number.text()))
+		# car_item = query.get_client_from_unp(int(self.txt_label_client_identification_number.text()))
 
 		dict_order = {
 			'brand': self.txt_label_brand.text(),
 			'car_number': self.txt_label_car_number.text(),
-
-			'company_id': query.get_client_from_unp(int(self.txt_label_client_identification_number.text())).id,
+			'order_number': self.txt_label_order_number.text(),
+			'company_id': client_item.id,
+			'company_name': client_item.full_name,
 			'client_unp': self.txt_label_client_identification_number.text(),
 			'prefix': self.txt_label_order_number_prefix.text(),
-			'data': datetime.now().date,
+			'data': datetime.now().date(),
 			'driver_name': self.txt_edit_lineEdit_client_owner_name.text(),
 			'driver_job': self.txt_edit_lineEdit_client_job_title.text(),
 			'chk_state': [
@@ -196,14 +202,14 @@ class Order:
 				company_id=dict_order['company_id']
 
 			)
-		temp_dict = {'car_id': query.get_car_from_id(self.txt_label_car_number.text()).id}
+		temp_dict = {'car_id': query.get_car_from_id(dict_order['car_number'])}
 		dict_order.update(temp_dict)
 
 		if not dict_order['driver_name'] in query.get_list_driver():
 			new.driver_create(
 				name=dict_order['driver_name'],
 				job=dict_order['driver_job'],
-				company_id=query.get_client_from_unp(int(dict_order['client_unp'])).id
+				company_id=client_item.id
 			)
 
 		driver_item = query.get_driver(dict_order['driver_name'])
@@ -213,21 +219,59 @@ class Order:
 				car_id=dict_order['car_id'],
 				company_id=dict_order['company_id'],
 				prefix=dict_order['prefix'],
-				data=dict_order['data'](),
+				data=dict_order['data'],
 				first_open=True,
 				data_close=None,
 				path_file='',
 				driver_id=driver_item.id
 			)
 
-			self.checkBox_1_repair_request.setChecked(False)
-			self.checkBox_2_application_order.setChecked(False)
-			self.checkBox_3_act_of_acceptance.setChecked(False)
+			self.checkBox_1_repair_request.setChecked(True)
+			self.checkBox_2_application_order.setChecked(True)
+			self.checkBox_3_act_of_acceptance.setChecked(True)
 			self.checkBox_4_internal_consumption.setChecked(True)
 
 			self.current_id = None
 		else:
 			new.update_prefix(self.current_id)
+			order_item = query.get_order_from_id(int(self.txt_label_order_number.text()))
+			dict_order['prefix'] = order_item.prefix
+
+		context_dict = {
+			'order_id': dict_order['order_number'],
+			'order_number': '{}-{}'.format(dict_order['order_number'], dict_order['prefix']),
+			'name': dict_order['company_name'],
+			'address': client_item.address,
+			'phone': client_item.telefone,
+			'mphone': client_item.mobile,
+			'driver': '{} {}'.format(dict_order['driver_job'], dict_order['driver_name']),
+			'brand': dict_order['brand'],
+			'car_number': dict_order['car_number'],
+			'path_file_dir': os.path.join(
+				client_item.name,
+				str(dict_order['data'].year),
+				str(dict_order['order_number'])
+			),
+			'file_name': '{act}-{day}.{month}'.format(
+				act=dict_order['order_number'],
+				day=dict_order['data'].day,
+				month=dict_order['data'].month
+			),
+			'crdata': '{day}.{month}.{year}'.format(
+				day=dict_order['data'].day,
+				month=dict_order['data'].month,
+				year=dict_order['data'].year
+			),
+			'curdata': '{day}.{month}.{year}'.format(
+				day=datetime.now().day,
+				month=datetime.now().month,
+				year=datetime.now().year
+			),
+			'chk_state': dict_order['chk_state']
+		}
+
+		CreateFile(context_dict)
+
 
 	def refresh(self):
 		query = APIAxiomDB()
@@ -414,32 +458,36 @@ class Order:
 		query = APIAxiomDB()
 
 		self.btn_pushButton_refresh.setText(_translate("MainWindow", "Очистить"))
-		self.checkBox_2_application_order.setText(_translate("MainWindow", " -  Заявка - Заказ"))
-		self.btn_pushButton_new_client.setText(_translate("MainWindow", "Новый\nклиент"))
-		self.txt_edit_lineEdit_client_owner_name.setText(_translate("MainWindow", "Фамилия И.О."))
-		self.label_client_job_title.setText(_translate("MainWindow", "Должность"))
-		self.btn_pushButton_car_part_choice.setText(_translate("MainWindow", "Запчасти"))
-		self.txt_label_order_number.setText(_translate("MainWindow", str(query.count_act() + 1)))
-		self.txt_label_brand.setText(_translate("MainWindow", "марка машины"))
-		self.btn_pushButton_order_close.setText(_translate("MainWindow", "Закрыть Акт"))
-		self.label_client_name.setText(_translate("MainWindow", "Клиент"))
-		self.txt_label_car_number.setText(_translate("MainWindow", "номер машины"))
 		self.btn_pushButton_car_car_choice.setText(_translate("MainWindow", "Машина"))
 		self.btn_pushButton_new_car.setText(_translate("MainWindow", "Новая\nмашина"))
 		self.btn_pushButton_print_order.setText(_translate("MainWindow", "Распечатать"))
+		self.btn_pushButton_new_client.setText(_translate("MainWindow", "Новый\nклиент"))
+		self.btn_pushButton_car_part_choice.setText(_translate("MainWindow", "Запчасти"))
+		self.btn_pushButton_order_close.setText(_translate("MainWindow", "Закрыть Акт"))
+
+		self.txt_label_order_number.setText(_translate("MainWindow", str(query.count_act() + 1)))
 		self.txt_label_order_number_prefix.setText(_translate("MainWindow", "А"))
-		self.checkBox_1_repair_request.setText(_translate("MainWindow", " -  Заявка - Заказ на ремонт"))
-		self.label_client_owner_name.setText(_translate("MainWindow", "ФИО заказчика"))
-		self.label_order_number.setText(_translate("MainWindow", "Заявка №"))
-		self.txt_label_client_name.setText(_translate("MainWindow", "название клиента"))
-		self.txt_label_model.setText(_translate("MainWindow", "модель машины"))
-		self.checkBox_4_internal_consumption.setText(_translate("MainWindow", " -  Внутренняя накладная"))
-		self.txt_edit_lineEdit_client_job_title.setText(_translate("MainWindow", "должность"))
-		self.checkBox_3_act_of_acceptance.setText(_translate("MainWindow", " -  Акт приёмки-сдачи"))
-		self.label_order_number_sep.setText(_translate("MainWindow", "-"))
-		self.txt_label_vin_code.setText(_translate("MainWindow", "VIN код машины"))
-		self.label_client_identification_number.setText(_translate("MainWindow", "УНП клиента"))
+		self.txt_label_client_name.setText(_translate("MainWindow", "Клиент"))
 		self.txt_label_client_identification_number.setText(_translate("MainWindow", "УНП клиента"))
+		self.txt_edit_lineEdit_client_owner_name.setText(_translate("MainWindow", ""))
+		self.txt_edit_lineEdit_client_job_title.setText(_translate("MainWindow", ""))
+		self.txt_label_brand.setText(_translate("MainWindow", "марка машины"))
+		self.txt_label_model.setText(_translate("MainWindow", "модель машины"))
+		self.txt_label_car_number.setText(_translate("MainWindow", "номер машины"))
+		self.txt_label_vin_code.setText(_translate("MainWindow", "VIN код машины"))
+
+		self.checkBox_1_repair_request.setText(_translate("MainWindow", " -  Заявка - Заказ на ремонт"))
+		self.checkBox_2_application_order.setText(_translate("MainWindow", " -  Заявка - Заказ"))
+		self.checkBox_3_act_of_acceptance.setText(_translate("MainWindow", " -  Акт приёмки-сдачи"))
+		self.checkBox_4_internal_consumption.setText(_translate("MainWindow", " -  Внутренняя накладная"))
+
+		self.label_order_number.setText(_translate("MainWindow", "Заявка №"))
+		self.label_order_number_sep.setText(_translate("MainWindow", "-"))
+		self.label_client_name.setText(_translate("MainWindow", "Клиент"))
+		self.label_client_identification_number.setText(_translate("MainWindow", "УНП клиента"))
+		self.label_client_owner_name.setText(_translate("MainWindow", "ФИО заказчика"))
+		self.label_client_job_title.setText(_translate("MainWindow", "Должность"))
+
 		self.dateEdit.setDisplayFormat(_translate("MainWindow", "d - MMMM - yyyy"))
 
 

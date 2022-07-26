@@ -4,14 +4,14 @@ from dbapi import APIAxiomDB
 
 class ListWOrder(BaseClassWidget):
     text = 'Заказ-Наряд'
-    size = 240
-    spis = []
+    size = 250
+    temp_list = []
     template = {
         'pattern': '  {} - {}    : {}'.format
     }
     query = APIAxiomDB()
 
-    def __int__(self):
+    def __int__(self, size=200):
         super(ListWOrder, self).__int__()
 
     def get_item_text_from_list(self, item):
@@ -24,6 +24,9 @@ class ListWOrder(BaseClassWidget):
         order_item_list = [ListWOrder.template['pattern'](elem.id, elem.prefix, elem.data)
                 for elem in self.query.get_list_order()]
         self.set_items(order_item_list)
+
+    def print_one(self):
+        pass
 
     def print_widget(self, name, foo='clt'):
         self.clear_items()
@@ -39,11 +42,11 @@ class ListWOrder(BaseClassWidget):
 
 class ListWClient(BaseClassWidget):
     text = 'Клиент'
-    size = 245
-    spis = []
+    size = 250
+    temp_list = []
     query = APIAxiomDB()
 
-    def __int__(self):
+    def __int__(self, size=200):
         super(ListWClient, self).__int__()
 
     def print(self):
@@ -56,45 +59,45 @@ class ListWClient(BaseClassWidget):
         client_item = self.query.get_client_from_order(id_num)
         self.set_item(client_item.name)
 
+    def print_widget(self):
+        pass
+
     def get_item_text_from_list(self, item):
         client_item_list = self.query.get_client_from_name(item.text())
         return client_item_list
 
-    # def print_widget(self, name):
-    #     self.clear_items()
-    #     new = APIAxiomDB()
-    #     temp = ['{} | {}-{}'.format(elem[2],elem[0],elem[1]) for elem in new.get_client_list_car(name)]
-    #     self.set_items(temp)
-
 
 class ListWCar(BaseClassWidget):
     text = 'Car'
-    size = 350
-    spis = list()
+    size = 330
+    temp_list = list()
     template = {
         'pattern': '{}  |  №- {} | {}-{}'.format
     }
     query = APIAxiomDB()
 
-    def __int__(self):
+    def __int__(self, size=350):
         super(ListWCar, self).__int__()
 
     def print(self):
         self.clear_items()
-        car_item_list = [ListWCar.template['pattern'](elem.id, elem.number, elem.name, elem.model)
-                for elem in self.query.get_list_car() if elem.name != 'Запчасти']
-        self.set_items(car_item_list)
 
-    def print_widget(self, name):
-        self.clear_items()
         car_item_list = [ListWCar.template['pattern'](elem.id, elem.number, elem.name, elem.model)
-                for elem in self.query.get_client_list_car(name) if elem.name != 'Запчасти']
+                for elem in self.query.get_list_car()
+                         if elem.name != 'Запчасти']
         self.set_items(car_item_list)
 
     def print_one(self, id_num: int):
         self.clear_items()
         car_item = self.query.get_car_from_order(id_num)
         self.set_item(ListWCar.template['pattern'](car_item.id, car_item.number, car_item.name, car_item.model))
+
+    def print_widget(self, name):
+        self.clear_items()
+        car_item_list = [ListWCar.template['pattern'](elem.id, elem.number, elem.name, elem.model)
+                for elem in self.query.get_client_list_car(name)
+                         if elem.name != 'Запчасти']
+        self.set_items(car_item_list)
 
     def get_item_text_from_list(self, item: str):
         elem = item.split()

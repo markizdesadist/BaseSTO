@@ -221,6 +221,18 @@ class CreateDB:
             ).where(CompanyDB.id == id)
             upd.execute()
 
+    @classmethod
+    def update_order_path(
+            cls,
+            id: int,
+            path_file: str = ''
+    ):
+        with db:
+            upd = OrderDB.update(
+                path_file=path_file
+            ).where(OrderDB.id == id)
+            upd.execute()
+
 
 if __name__ == "__main__":
     NEW = CreateDB()

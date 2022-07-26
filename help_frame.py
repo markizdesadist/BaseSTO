@@ -2,9 +2,9 @@ from PyQt5 import QtWidgets, QtCore
 
 
 class Help:
-    # def __int__(self):
-    #     self.frame_help = QtWidgets.QFrame()
-
+    def __init__(self):
+        self.frame_help = None
+        self.txt_plainTextEdit_help = None
 
     def set_body(self, frame):
         self.frame_help = QtWidgets.QFrame(frame)
@@ -20,4 +20,3 @@ class Help:
         self.txt_plainTextEdit_help.setAutoFillBackground(True)
         self.txt_plainTextEdit_help.setStyleSheet("background-color: rgb(229, 229, 229);")
         self.txt_plainTextEdit_help.setObjectName("txt_plainTextEdit_help")
-
