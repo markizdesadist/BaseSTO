@@ -1,11 +1,10 @@
-from configparser import ConfigParser
-from peewee import *
-from datetime import datetime
 import os.path
 
+from peewee import *
+from datetime import datetime
 
-# config = ConfigParser()
-# config.read(os.path.join(os.getcwd(), 'setting.ini'))
+
+# sql_path = os.path.sep.join(('..', 'axiom.db'))
 db = SqliteDatabase('axiom.db')
 
 
