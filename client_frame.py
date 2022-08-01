@@ -116,6 +116,7 @@ class Client:
         self.txt_edit_lineEdit_client_name.setFont(CSS.set_font())
         self.txt_edit_lineEdit_client_name.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.txt_edit_lineEdit_client_name.setObjectName("txt_edit_lineEdit_client_name")
+        self.txt_edit_lineEdit_client_name.setClearButtonEnabled(True)
 
         self.txt_edit_textEdit_client_full_name = QtWidgets.QTextEdit(self.frame)
         self.txt_edit_textEdit_client_full_name.setGeometry(QtCore.QRect(128, 150, 333, 61))
@@ -124,6 +125,7 @@ class Client:
         self.txt_edit_textEdit_client_full_name.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.txt_edit_textEdit_client_full_name.setTabChangesFocus(True)
         self.txt_edit_textEdit_client_full_name.setObjectName("txt_edit_textEdit_client_full_name")
+        # self.txt_edit_textEdit_client_full_name.overwriteMode()
 
         self.txt_edit_textEdit_client_address = QtWidgets.QTextEdit(self.frame)
         self.txt_edit_textEdit_client_address.setGeometry(QtCore.QRect(128, 220, 421, 61))
@@ -139,18 +141,21 @@ class Client:
         self.txt_edit_lineEdit_client_identification_number.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.txt_edit_lineEdit_client_identification_number.setObjectName(
             "txt_edit_lineEdit_client_identification_number")
+        self.txt_edit_lineEdit_client_identification_number.setClearButtonEnabled(True)
 
         self.txt_edit_lineEdit_client_phone = QtWidgets.QLineEdit(self.frame)
         self.txt_edit_lineEdit_client_phone.setGeometry(QtCore.QRect(128, 390, 333, 31))
         self.txt_edit_lineEdit_client_phone.setFont(CSS.set_font())
         self.txt_edit_lineEdit_client_phone.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.txt_edit_lineEdit_client_phone.setObjectName("txt_edit_lineEdit_client_phone")
+        self.txt_edit_lineEdit_client_phone.setClearButtonEnabled(True)
 
         self.txt_edit_lineEdit_client_mobile_phone = QtWidgets.QLineEdit(self.frame)
         self.txt_edit_lineEdit_client_mobile_phone.setGeometry(QtCore.QRect(128, 430, 425, 31))
         self.txt_edit_lineEdit_client_mobile_phone.setFont(CSS.set_font())
         self.txt_edit_lineEdit_client_mobile_phone.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.txt_edit_lineEdit_client_mobile_phone.setObjectName("txt_edit_lineEdit_client_mobile_phone")
+        self.txt_edit_lineEdit_client_mobile_phone.setClearButtonEnabled(True)
 
     def set_label(self):
         self.label_client_identification_number = QtWidgets.QLabel(self.frame)
@@ -199,7 +204,7 @@ class Client:
         self.label_client_phone.setText(_translate("MainWindow", "Телефон"))
         self.label_client_mobile_phone.setText(_translate("MainWindow", "Мобильный"))
         
-        self.txt_edit_lineEdit_client_name.setText(_translate("MainWindow", "клиент"))
+        self.txt_edit_lineEdit_client_name.setText(_translate("MainWindow", "  клиент"))
         self.txt_edit_textEdit_client_full_name.setHtml(_translate(
             "MainWindow",
             "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
@@ -213,7 +218,7 @@ class Client:
             "<body style=\" font-family:\'Droid Sans\'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
             "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; "
             "-qt-block-indent:0; text-indent:0px;\">"
-            "<span style=\" font-size:10pt;\">полное название клиента</span>"
+            "<span style=\" font-size:10pt;\">  полное название клиента</span>"
             "</p>"
             "</body>"
             "</html>")
@@ -230,14 +235,14 @@ class Client:
             "<body style=\" font-family:\'Droid Sans\'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
             "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; "
             "text-indent:0px;\">"
-            "<span style=\" font-size:10pt;\">Адрес</span>"
+            "<span style=\" font-size:10pt;\">  Адрес</span>"
             "</p>"
             "</body>"
             "</html>")
         )
-        self.txt_edit_lineEdit_client_identification_number.setText(_translate("MainWindow", "УНП клиента"))
-        self.txt_edit_lineEdit_client_phone.setText(_translate("MainWindow", "городской телефон"))
-        self.txt_edit_lineEdit_client_mobile_phone.setText(_translate("MainWindow", "мобильный номер клиента"))
+        self.txt_edit_lineEdit_client_identification_number.setText(_translate("MainWindow", "  УНП клиента"))
+        self.txt_edit_lineEdit_client_phone.setText(_translate("MainWindow", "  городской телефон"))
+        self.txt_edit_lineEdit_client_mobile_phone.setText(_translate("MainWindow", "  мобильный номер клиента"))
 
 
 if __name__ == '__main__':

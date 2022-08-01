@@ -1,15 +1,11 @@
 import os
 import os.path
-from docxtpl import DocxTemplate, RichText
 import sys
-import subprocess
-import re
+from docxtpl import DocxTemplate, RichText
 from databasecreate import CreateDB
-from configparser import ConfigParser
+from win32api import ShellExecute
+from win32print import GetDefaultPrinter
 
-
-# config = ConfigParser()
-# config.read('setting.ini')
 
 class CreateFile:
 	def __init__(self, cont_dict):
@@ -28,8 +24,6 @@ class CreateFile:
 			self.print_to_file(cont_dict, *template)
 
 	def print_to_file(self, dict_text: dict, template: str, pref: int = 0, pref_name: str = ''):
-		# for key in dict_text:
-		# 	print(key, ' : ', dict_text[key])
 		if pref:
 			document = DocxTemplate(template)
 
@@ -42,24 +36,27 @@ class CreateFile:
 			rdriv = RichText()
 			rphone = RichText()
 			rmphone = RichText()
+			rcurdata = RichText()
 
-			radr.add(dict_text['address'], size=24)
-			rdriv.add(dict_text['driver'], size=24)
-			rphone.add(dict_text['phone'], size=24)
-			rmphone.add(dict_text['mphone'], size=24)
+			radr.add(dict_text['address'], size=28)
+			rdriv.add(dict_text['driver'], size=28)
+			rphone.add(dict_text['phone'], size=28)
+			rmphone.add(dict_text['mphone'], size=28)
 
 			if pref_name == 'act_tmc':
-				rorder.add(dict_text['order_number'], size=32, bold=True)
-				rdata.add(dict_text['crdata'], size=32, bold=True)
-				rname.add(dict_text['name'], size=32, bold=True)
+				rorder.add('{}-{}'.format(dict_text['order_number'], dict_text['prefix']), size=40, bold=True, underline=True)
+				rdata.add(dict_text['curdata'], size=36, bold=True)
+				rname.add(dict_text['name'], size=36, bold=True)
 				rbrand.add(dict_text['brand'], size=32, bold=True)
 				rnum.add(dict_text['car_number'], size=32, bold=True)
+				rcurdata.add(dict_text['curdata'], size=36, bold=True, underline=True)
 			else:
-				rorder.add(dict_text['order_number'], size=24, bold=True)
-				rdata.add(dict_text['crdata'], size=24)
-				rname.add(dict_text['name'], size=24)
-				rbrand.add(dict_text['brand'], size=24)
-				rnum.add(dict_text['car_number'], size=24)
+				rorder.add(dict_text['order_number'], size=28, bold=True)
+				rdata.add(dict_text['curdata'], size=28)
+				rname.add(dict_text['name'], size=28)
+				rbrand.add(dict_text['brand'], size=28)
+				rnum.add(dict_text['car_number'], size=28)
+				rcurdata.add(dict_text['curdata'], size=28)
 
 			new_dict = {
 				'order_number': rorder,
@@ -70,7 +67,8 @@ class CreateFile:
 				'address': radr,
 				'driver': rdriv,
 				'phone': rphone,
-				'mphone': rmphone
+				'mphone': rmphone,
+				'curdata': rcurdata
 			}
 
 			document.render(new_dict)
@@ -90,19 +88,25 @@ class CreateFile:
 			upd.update_order_path(int(dict_text['order_id']), path)
 
 			if sys.platform == 'win32':
-				if pref_name == 'order':
-					self.print_to_print(path_file + '.docx')
 				self.print_to_print(path_file + '.docx')
-			if sys.platform == 'linux':
-				convert_to(path_sep, path_file + '.docx')
-				self.print_to_print(path_file + '.pdf')
+			# if sys.platform == 'linux':
+			# 	convert_to(path_sep, path_file + '.docx')
+			# 	self.print_to_print(path_file + '.pdf')
 
 	@classmethod
 	def print_to_print(cls, path):
 		if sys.platform == 'win32':
-			os.startfile(path, "print")
-		if sys.platform == 'linux':
-			os.system('lpr ' + path)
+			ShellExecute(
+				0,
+				'printto',
+				path,
+				'/d:"%s"' % GetDefaultPrinter(),
+				'.',
+				0
+			)
+			# os.startfile(path, "print")
+		# if sys.platform == 'linux':
+		# 	os.system('lpr ' + path)
 
 	@classmethod
 	def exists_file(cls, path):
@@ -110,28 +114,28 @@ class CreateFile:
 			os.makedirs(path)
 
 
-def convert_to(folder, source, timeout=None):
-	args = [libreoffice_exec(), '--headless', '--convert-to', 'pdf', '--outdir', folder, source]
-
-	process = subprocess.run(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=timeout)
-	filename = re.search('-> (.*?) using filter', process.stdout.decode())
-
-	if filename is None:
-		raise LibreOfficeError(process.stdout.decode())
-	else:
-		return filename.group(1)
-
-
-def libreoffice_exec():
-	if sys.platform == 'darwin':
-		return '/Applications/LibreOffice.app/Contents/MacOS/soffice'
-	return 'libreoffice'
-
-
-class LibreOfficeError(Exception):
-	def __init__(self, output):
-		self.output = output
+# def convert_to(folder, source, timeout=None):
+# 	args = [libreoffice_exec(), '--headless', '--convert-to', 'pdf', '--outdir', folder, source]
+#
+# 	process = subprocess.run(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=timeout)
+# 	filename = re.search('-> (.*?) using filter', process.stdout.decode())
+#
+# 	if filename is None:
+# 		raise LibreOfficeError(process.stdout.decode())
+# 	else:
+# 		return filename.group(1)
+#
+#
+# def libreoffice_exec():
+# 	if sys.platform == 'darwin':
+# 		return '/Applications/LibreOffice.app/Contents/MacOS/soffice'
+# 	return 'libreoffice'
+#
+#
+# class LibreOfficeError(Exception):
+# 	def __init__(self, output):
+# 		self.output = output
 
 
 if __name__ == '__main__':
-	print(sys.platform)
+	pass

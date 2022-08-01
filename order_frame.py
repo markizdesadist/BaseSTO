@@ -1,5 +1,4 @@
 from PyQt5 import QtWidgets, QtCore
-from PyQt5.QtWidgets import QWidget, QMainWindow
 
 from CSS_template import CSS
 from dbapi import APIAxiomDB
@@ -126,11 +125,19 @@ class Order:
 		self.txt_label_model.setObjectName("txt_label_model")
 		self.txt_label_model.setIndent(10)
 
+		# self.combo_box = QtWidgets.QComboBox(self.frame)
+		# self.combo_box.setGeometry(QtCore.QRect(128, 190, 425, 31))
+		# self.combo_box.setFont(CSS.set_font(12, False, 50))
+		# self.combo_box.setAutoFillBackground(False)
+		# self.combo_box.setStyleSheet("background-color: rgb(221, 221, 221);")
+		# self.combo_box.setObjectName("combo_box")
+
 		self.txt_edit_lineEdit_client_job_title = QtWidgets.QLineEdit(self.frame)
 		self.txt_edit_lineEdit_client_job_title.setGeometry(QtCore.QRect(128, 150, 333, 31))
 		self.txt_edit_lineEdit_client_job_title.setAutoFillBackground(True)
 		self.txt_edit_lineEdit_client_job_title.setStyleSheet("background-color: rgb(255, 255, 255);")
 		self.txt_edit_lineEdit_client_job_title.setObjectName("txt_edit_lineEdit_client_job_title")
+		self.txt_edit_lineEdit_client_job_title.setClearButtonEnabled(True)
 
 		self.txt_label_vin_code = QtWidgets.QLabel(self.frame)
 		self.txt_label_vin_code.setGeometry(QtCore.QRect(128, 430, 425, 30))
@@ -239,7 +246,8 @@ class Order:
 
 		context_dict = {
 			'order_id': dict_order['order_number'],
-			'order_number': '{}-{}'.format(dict_order['order_number'], dict_order['prefix']),
+			'order_number': '{}'.format(dict_order['order_number']),
+			'prefix': dict_order['prefix'],
 			'name': dict_order['company_name'],
 			'address': client_item.address,
 			'phone': client_item.telefone,
@@ -252,10 +260,10 @@ class Order:
 				str(dict_order['data'].year),
 				str(dict_order['order_number'])
 			),
-			'file_name': '{act}-{day}.{month}'.format(
-				act=dict_order['order_number'],
-				day=dict_order['data'].day,
-				month=dict_order['data'].month
+			'file_name': '{act}-'.format(
+				act=dict_order['order_number']
+				# day=dict_order['data'].day,
+				# month=dict_order['data'].month
 			),
 			'crdata': '{day}.{month}.{year}'.format(
 				day=dict_order['data'].day,
@@ -341,7 +349,7 @@ class Order:
 
 		self.btn_pushButton_order_close = QtWidgets.QPushButton(self.frame)
 		self.btn_pushButton_order_close.setGeometry(QtCore.QRect(453, 50, 101, 33))
-		self.btn_pushButton_order_close.setFont(CSS.set_font(12, False, 50))
+		self.btn_pushButton_order_close.setFont(CSS.set_font(10, False, 50))
 		self.btn_pushButton_order_close.setAutoFillBackground(False)
 		self.btn_pushButton_order_close.setStyleSheet("background-color: rgb(255, 170, 0);")
 		self.btn_pushButton_order_close.setObjectName("btn_pushButton_order_close")
@@ -431,7 +439,7 @@ class Order:
 		self.label_client_owner_name.setObjectName("label_client_owner_name")
 
 		self.label_order_number = QtWidgets.QLabel(self.frame)
-		self.label_order_number.setGeometry(QtCore.QRect(128, 48, 101, 30))
+		self.label_order_number.setGeometry(QtCore.QRect(120, 48, 101, 30))
 		self.label_order_number.setFont(CSS.set_font(14, True, 75))
 		self.label_order_number.setAutoFillBackground(False)
 		self.label_order_number.setObjectName("label_order_number")
