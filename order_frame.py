@@ -1,4 +1,5 @@
 from PyQt5 import QtWidgets, QtCore
+from PyQt5.QtGui import QFont
 
 from CSS_template import CSS
 from dbapi import APIAxiomDB
@@ -73,6 +74,7 @@ class Order:
 		self.txt_edit_lineEdit_client_owner_name.setAutoFillBackground(True)
 		self.txt_edit_lineEdit_client_owner_name.setClearButtonEnabled(True)
 		self.txt_edit_lineEdit_client_owner_name.setStyleSheet("background-color: rgb(255, 255, 255);")
+		self.txt_edit_lineEdit_client_owner_name.setPlaceholderText("  ФИО заказчика")
 		self.txt_edit_lineEdit_client_owner_name.setObjectName("txt_edit_lineEdit_client_owner_name")
 
 		self.txt_label_order_number = QtWidgets.QLabel(self.frame)
@@ -137,6 +139,7 @@ class Order:
 		self.txt_edit_lineEdit_client_job_title.setAutoFillBackground(True)
 		self.txt_edit_lineEdit_client_job_title.setStyleSheet("background-color: rgb(255, 255, 255);")
 		self.txt_edit_lineEdit_client_job_title.setObjectName("txt_edit_lineEdit_client_job_title")
+		self.txt_edit_lineEdit_client_job_title.setPlaceholderText("  Должность заказчика")
 		self.txt_edit_lineEdit_client_job_title.setClearButtonEnabled(True)
 
 		self.txt_label_vin_code = QtWidgets.QLabel(self.frame)
@@ -161,6 +164,7 @@ class Order:
 		self.set_label()
 		self.add_action()
 		self.retranslateUi()
+		# CSS.set_logo(self.frame)
 
 	@classmethod
 	def clear_txt(cls, txt):
@@ -285,6 +289,21 @@ class Order:
 		query = APIAxiomDB()
 		self.txt_label_order_number.setText(str(query.count_act() + 1))
 		self.txt_label_order_number_prefix.setText('A')
+
+		self.checkBox_1_repair_request.setChecked(True)
+		self.checkBox_2_application_order.setChecked(True)
+		self.checkBox_3_act_of_acceptance.setChecked(True)
+		self.checkBox_4_internal_consumption.setChecked(True)
+
+		self.txt_label_client_name.setText('название компании')
+		self.txt_label_client_identification_number.setText(str("УНП клиента"))
+		self.txt_label_brand.setText("Модель")
+		self.txt_label_car_number.setText("Номер")
+		self.txt_label_model.setText("Модель")
+		self.txt_label_vin_code.setText("УЗМ код")
+		self.txt_edit_lineEdit_client_owner_name.setText("")
+		self.txt_edit_lineEdit_client_job_title.setText("")
+
 		self.current_id = None
 
 	def part_choice(self):
@@ -332,19 +351,22 @@ class Order:
 		self.btn_pushButton_refresh.setGeometry(QtCore.QRect(453, 480, 101, 33))
 		self.btn_pushButton_refresh.setFont(CSS.set_font(12, False, 50))
 		self.btn_pushButton_refresh.setAutoFillBackground(False)
-		self.btn_pushButton_refresh.setStyleSheet("background-color: rgb(85, 170, 0);")
+		self.btn_pushButton_refresh.setStyleSheet(CSS.set_btn_color())
+		self.btn_pushButton_refresh.setFont(CSS.set_font())
 		self.btn_pushButton_refresh.setObjectName("btn_pushButton_order_close")
 
 		self.btn_pushButton_new_client = QtWidgets.QPushButton(self.frame)
 		self.btn_pushButton_new_client.setGeometry(QtCore.QRect(468, 110, 85, 71))
 		self.btn_pushButton_new_client.setAutoFillBackground(False)
-		self.btn_pushButton_new_client.setStyleSheet("background-color: rgb(85, 170, 0);")
+		self.btn_pushButton_new_client.setStyleSheet(CSS.set_btn_color())
+		self.btn_pushButton_new_client.setFont(CSS.set_font())
 		self.btn_pushButton_new_client.setObjectName("btn_pushButton_new_client")
 
 		self.btn_pushButton_car_part_choice = QtWidgets.QPushButton(self.frame)
 		self.btn_pushButton_car_part_choice.setGeometry(QtCore.QRect(225, 310, 85, 33))
 		self.btn_pushButton_car_part_choice.setAutoFillBackground(False)
-		self.btn_pushButton_car_part_choice.setStyleSheet("background-color: rgb(85, 170, 0);")
+		self.btn_pushButton_car_part_choice.setStyleSheet(CSS.set_btn_color())
+		self.btn_pushButton_car_part_choice.setFont(CSS.set_font())
 		self.btn_pushButton_car_part_choice.setObjectName("btn_pushButton_car_part_choice")
 
 		self.btn_pushButton_order_close = QtWidgets.QPushButton(self.frame)
@@ -357,19 +379,23 @@ class Order:
 		self.btn_pushButton_car_car_choice = QtWidgets.QPushButton(self.frame)
 		self.btn_pushButton_car_car_choice.setGeometry(QtCore.QRect(128, 310, 85, 33))
 		self.btn_pushButton_car_car_choice.setAutoFillBackground(False)
-		self.btn_pushButton_car_car_choice.setStyleSheet("background-color: rgb(85, 170, 0);")
+		self.btn_pushButton_car_car_choice.setStyleSheet(CSS.set_btn_color())
+		self.btn_pushButton_car_car_choice.setFont(CSS.set_font())
 		self.btn_pushButton_car_car_choice.setObjectName("btn_pushButton_car_car_choice")
 
 		self.btn_pushButton_new_car = QtWidgets.QPushButton(self.frame)
 		self.btn_pushButton_new_car.setGeometry(QtCore.QRect(468, 350, 85, 71))
 		self.btn_pushButton_new_car.setAutoFillBackground(False)
-		self.btn_pushButton_new_car.setStyleSheet("background-color: rgb(85, 170, 0);")
+		self.btn_pushButton_new_car.setStyleSheet(CSS.set_btn_color())
+		self.btn_pushButton_new_car.setFont(CSS.set_font())
 		self.btn_pushButton_new_car.setObjectName("btn_pushButton_new_car")
+		# self.btn_pushButton_new_car.setFont()
 
 		self.btn_pushButton_print_order = QtWidgets.QPushButton(self.frame)
-		self.btn_pushButton_print_order.setGeometry(QtCore.QRect(468, 520, 85, 71))
+		self.btn_pushButton_print_order.setGeometry(QtCore.QRect(453, 520, 101, 71))
 		self.btn_pushButton_print_order.setAutoFillBackground(False)
-		self.btn_pushButton_print_order.setStyleSheet("background-color: rgb(85, 170, 0);")
+		self.btn_pushButton_print_order.setStyleSheet(CSS.set_btn_color())
+		self.btn_pushButton_print_order.setFont(CSS.set_font())
 		self.btn_pushButton_print_order.setObjectName("btn_pushButton_print_order")
 
 	def set_checkBox(self):
@@ -477,8 +503,8 @@ class Order:
 		self.txt_label_order_number_prefix.setText(_translate("MainWindow", "А"))
 		self.txt_label_client_name.setText(_translate("MainWindow", "Клиент"))
 		self.txt_label_client_identification_number.setText(_translate("MainWindow", "УНП клиента"))
-		self.txt_edit_lineEdit_client_owner_name.setText(_translate("MainWindow", ""))
-		self.txt_edit_lineEdit_client_job_title.setText(_translate("MainWindow", ""))
+		# self.txt_edit_lineEdit_client_owner_name.setText(_translate("MainWindow", ""))
+		# self.txt_edit_lineEdit_client_job_title.setText(_translate("MainWindow", ""))
 		self.txt_label_brand.setText(_translate("MainWindow", "марка машины"))
 		self.txt_label_model.setText(_translate("MainWindow", "модель машины"))
 		self.txt_label_car_number.setText(_translate("MainWindow", "номер машины"))

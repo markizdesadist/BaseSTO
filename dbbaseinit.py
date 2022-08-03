@@ -2,10 +2,15 @@ import os.path
 
 from peewee import *
 from datetime import datetime
+import configparser
 
+config = configparser.ConfigParser()
+config.read('setting.ini')
 
-# sql_path = os.path.sep.join(('..', 'axiom.db'))
-db = SqliteDatabase('axiom.db')
+if os.path.exists(config['BASE']['specified_db']):
+    db = SqliteDatabase(config['BASE']['db'])
+else:
+    db = SqliteDatabase(config['BASE']['db'])
 
 
 class BaseModel(Model):
@@ -63,3 +68,7 @@ class OrderDB(BaseModel):
     class Meta:
         table_name = 'order_tbl'
         order_by = 'order_number'
+
+
+if __name__ == '__main__':
+    print(config['BASE']["db"])

@@ -87,6 +87,9 @@ class MenuBar:
 
         self.retranslateUi()
 
+    def add_action(self):
+        pass
+
     def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
 

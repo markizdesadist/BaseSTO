@@ -59,8 +59,9 @@ class ListWClient(BaseClassWidget):
         client_item = self.query.get_client_from_order(id_num)
         self.set_item(client_item.name)
 
-    def print_widget(self):
-        pass
+    def print_widget(self, client_item):
+        self.clear_items()
+        self.set_item(client_item.name)
 
     def get_item_text_from_list(self, item):
         client_item_list = self.query.get_client_from_name(item.text())
@@ -72,7 +73,7 @@ class ListWCar(BaseClassWidget):
     size = 330
     temp_list = list()
     template = {
-        'pattern': '{}  |  №- {} | {}-{}'.format
+        'pattern': '{}  | {} | {}-{}'.format
     }
     query = APIAxiomDB()
 

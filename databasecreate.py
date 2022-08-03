@@ -28,10 +28,11 @@ class CreateDB:
     @classmethod
     def create_db(cls) -> None:
         """Создание новой базы данных."""
-        with db:
-            db.create_tables(
-                [CompanyDB, CarDB, OrderDB, Driver], safe=True
-            )
+        if not db:
+            with db:
+                db.create_tables(
+                    [CompanyDB, CarDB, OrderDB, Driver], safe=True
+                )
 
     @classmethod
     def driver_create(

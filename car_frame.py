@@ -1,4 +1,6 @@
 from PyQt5 import QtCore, QtWidgets
+from PyQt5.QtGui import QFont
+
 from CSS_template import CSS
 from dbapi import APIAxiomDB
 from databasecreate import CreateDB
@@ -79,7 +81,8 @@ class Car:
     def set_body(self):
         self.btn_pushButton_new_client = QtWidgets.QPushButton(self.frame)
         self.btn_pushButton_new_client.setGeometry(QtCore.QRect(468, 110, 85, 71))
-        self.btn_pushButton_new_client.setStyleSheet("background-color: rgb(85, 170, 0);")
+        self.btn_pushButton_new_client.setStyleSheet(CSS.set_btn_color())
+        self.btn_pushButton_new_client.setFont(CSS.set_font())
         self.btn_pushButton_new_client.setObjectName("btn_pushButton_new_client")
 
         # self.btn_pushButton_car_part_choice = QtWidgets.QPushButton(self.frame)
@@ -93,14 +96,16 @@ class Car:
         # self.btn_pushButton_car_car_choice.setObjectName("btn_pushButton_car_car_choice")
 
         self.btn_pushButton_save = QtWidgets.QPushButton(self.frame)
-        self.btn_pushButton_save.setGeometry(QtCore.QRect(468, 520, 85, 71))
-        self.btn_pushButton_save.setStyleSheet("background-color: rgb(85, 170, 0);")
+        self.btn_pushButton_save.setGeometry(QtCore.QRect(453, 520, 101, 71))
+        self.btn_pushButton_save.setStyleSheet(CSS.set_btn_color())
+        self.btn_pushButton_save.setFont(CSS.set_font())
         self.btn_pushButton_save.setObjectName("btn_pushButton_save")
 
         self.btn_pushButton_edit = QtWidgets.QPushButton(self.frame)
         self.btn_pushButton_edit.setGeometry(QtCore.QRect(468, 350, 85, 71))
         self.btn_pushButton_edit.setAutoFillBackground(False)
-        self.btn_pushButton_edit.setStyleSheet("background-color: rgb(85, 170, 0);")
+        self.btn_pushButton_edit.setStyleSheet(CSS.set_btn_color())
+        self.btn_pushButton_edit.setFont(CSS.set_font())
         self.btn_pushButton_edit.setObjectName("btn_pushButton_new_car")
 
         self.txt_label_client_name = QtWidgets.QLabel(self.frame)
@@ -122,6 +127,7 @@ class Car:
         self.txt_label_brand.setFont(CSS.set_font())
         self.txt_label_brand.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.txt_label_brand.setObjectName("txt_label_brand")
+        self.txt_label_brand.setPlaceholderText(" Машина")
         self.txt_label_brand.setClearButtonEnabled(True)
 
         self.txt_label_car_number = QtWidgets.QLineEdit(self.frame)
@@ -129,6 +135,7 @@ class Car:
         self.txt_label_car_number.setFont(CSS.set_font())
         self.txt_label_car_number.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.txt_label_car_number.setObjectName("txt_label_car_number")
+        self.txt_label_car_number.setPlaceholderText(" Номер")
         self.txt_label_car_number.setClearButtonEnabled(True)
 
         self.txt_label_model = QtWidgets.QLineEdit(self.frame)
@@ -136,6 +143,7 @@ class Car:
         self.txt_label_model.setFont(CSS.set_font())
         self.txt_label_model.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.txt_label_model.setObjectName("txt_label_model")
+        self.txt_label_model.setPlaceholderText(" Модель")
         self.txt_label_model.setClearButtonEnabled(True)
 
         self.txt_label_vin_code = QtWidgets.QLineEdit(self.frame)
@@ -143,6 +151,7 @@ class Car:
         self.txt_label_vin_code.setFont(CSS.set_font())
         self.txt_label_vin_code.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.txt_label_vin_code.setObjectName("txt_label_vin_code")
+        self.txt_label_vin_code.setPlaceholderText(" УЗМ код машины")
         self.txt_label_vin_code.setClearButtonEnabled(True)
 
         self.set_label()
@@ -177,7 +186,7 @@ class Car:
 
         self.txt_label_client_name.setText(_translate("MainWindow", "Владелец машины"))
         self.txt_label_client_identification_number.setText(_translate("MainWindow", "УНП клиента"))
-        self.txt_label_brand.setText(_translate("MainWindow", "  марка машины"))
-        self.txt_label_car_number.setText(_translate("MainWindow", "  Номер машины"))
-        self.txt_label_model.setText(_translate("MainWindow", "  модель машины"))
-        self.txt_label_vin_code.setText(_translate("MainWindow", "  VIN код машины"))
+        # self.txt_label_brand.setText(_translate("MainWindow", "  марка машины"))
+        # self.txt_label_car_number.setText(_translate("MainWindow", "  Номер машины"))
+        # self.txt_label_model.setText(_translate("MainWindow", "  модель машины"))
+        # self.txt_label_vin_code.setText(_translate("MainWindow", "  VIN код машины"))

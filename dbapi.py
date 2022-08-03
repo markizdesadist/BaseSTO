@@ -216,6 +216,12 @@ class APIAxiomDB:
 		return temp
 
 	@classmethod
+	def get_client_from_car_id(cls, id_num):
+		with db:
+			temp = CompanyDB.get(CompanyDB.id == CarDB.get(CarDB.id == id_num).company_id)
+		return temp
+
+	@classmethod
 	def count_act(cls):
 		with db:
 			temp = OrderDB.select().count()

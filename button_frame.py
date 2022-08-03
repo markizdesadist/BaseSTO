@@ -1,4 +1,13 @@
 from PyQt5 import QtWidgets, QtCore, QtGui
+from CSS_template import CSS
+import configparser
+
+config = configparser.ConfigParser()
+config.read('setting.ini')
+
+btn_color = 'green'
+if int(config['HELP']['btn_news']):
+    btn_color = 'red'
 
 
 class BtnFrame:
@@ -22,55 +31,47 @@ class BtnFrame:
     def set_body(self):
         self.btn_pushButton_exit = QtWidgets.QPushButton(self.frame)
         self.btn_pushButton_exit.setGeometry(QtCore.QRect(1110, 5, 117, 30))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.btn_pushButton_exit.setFont(font)
+        self.btn_pushButton_exit.setFont(CSS.set_font())
         self.btn_pushButton_exit.setAutoFillBackground(False)
         self.btn_pushButton_exit.setStyleSheet("background-color: rgb(0, 170, 0);\n"
                                                "border-bottom-color: rgb(255, 255, 127);")
         self.btn_pushButton_exit.setObjectName("btn_pushButton_exit")
+
         self.btn_pushButton_help = QtWidgets.QPushButton(self.frame)
         self.btn_pushButton_help.setGeometry(QtCore.QRect(900, 5, 117, 30))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.btn_pushButton_help.setFont(font)
+        self.btn_pushButton_help.setFont(CSS.set_font())
         self.btn_pushButton_help.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.btn_pushButton_help.setAutoFillBackground(False)
-        self.btn_pushButton_help.setStyleSheet("background-color: rgb(0, 170, 0);\n"
-                                               "border-bottom-color: rgb(255, 255, 127);")
+        self.btn_pushButton_help.setStyleSheet("background-color: {};\n"
+                                               "border-bottom-color: rgb(255, 255, 127);".format(btn_color))
         self.btn_pushButton_help.setObjectName("btn_pushButton_help")
+
         self.pushButton_6 = QtWidgets.QPushButton(self.frame)
         self.pushButton_6.setGeometry(QtCore.QRect(50, 5, 117, 30))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.pushButton_6.setFont(font)
+        self.pushButton_6.setFont(CSS.set_font())
         self.pushButton_6.setAutoFillBackground(False)
         self.pushButton_6.setStyleSheet("background-color: rgb(0, 170, 0);\n"
                                         "border-bottom-color: rgb(255, 255, 127);")
         self.pushButton_6.setObjectName("pushButton_6")
         self.pushButton_7 = QtWidgets.QPushButton(self.frame)
         self.pushButton_7.setGeometry(QtCore.QRect(170, 5, 117, 30))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.pushButton_7.setFont(font)
+        self.pushButton_7.setFont(CSS.set_font())
         self.pushButton_7.setAutoFillBackground(False)
         self.pushButton_7.setStyleSheet("background-color: rgb(0, 170, 0);\n"
                                         "border-bottom-color: rgb(255, 255, 127);")
         self.pushButton_7.setObjectName("pushButton_7")
+
         self.pushButton_8 = QtWidgets.QPushButton(self.frame)
         self.pushButton_8.setGeometry(QtCore.QRect(290, 5, 117, 30))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.pushButton_8.setFont(font)
+        self.pushButton_8.setFont(CSS.set_font())
         self.pushButton_8.setAutoFillBackground(False)
         self.pushButton_8.setStyleSheet("background-color: rgb(0, 170, 0);\n"
                                         "border-bottom-color: rgb(255, 255, 127);")
         self.pushButton_8.setObjectName("pushButton_8")
+
         self.pushButton_9 = QtWidgets.QPushButton(self.frame)
         self.pushButton_9.setGeometry(QtCore.QRect(410, 5, 117, 30))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.pushButton_9.setFont(font)
+        self.pushButton_9.setFont(CSS.set_font())
         self.pushButton_9.setAutoFillBackground(False)
         self.pushButton_9.setStyleSheet("background-color: rgb(0, 170, 0);\n"
                                         "border-bottom-color: rgb(255, 255, 127);")

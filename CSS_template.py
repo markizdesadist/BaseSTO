@@ -1,16 +1,42 @@
+import os.path
+
 from PyQt5 import QtGui, QtWidgets, QtCore
 from abc import ABC, abstractmethod
-from configparser import ConfigParser
+import logging
+
+from PyQt5.QtGui import QFont
 
 from dbapi import APIAxiomDB
+import configparser
 
-
-config = ConfigParser()
+config = configparser.ConfigParser()
 config.read('setting.ini')
+
+font_size = int(config['FONT_List_widget']['size_font'])
+try:
+    if int(config['FONT_List_widget']['bold']):
+        font_bold = True
+    else:
+        font_bold = False
+except ValueError:
+    font_bold = False
+
+btn_color = config['COLOR']['btn_color']
+btn_font_size = int(config['COLOR']['btn_font_size'])
+btn_font_color = config['COLOR']['btn_font_color']
+
+font = QFont()
+font.setBold(True)
+font.setPointSize(btn_font_size)
 
 
 class CSS:
     """Шаблоны для повторяющихся элементов, шрифта, и др."""
+    @classmethod
+    def logger_wrap(cls, func):
+        def wrapper():
+            return func
+        return wrapper()
 
     def __init__(self):
         self.btn_pushButton_refresh = None
@@ -25,8 +51,26 @@ class CSS:
         return font
 
     @classmethod
+    def set_font_btn(cls):
+        font = QFont()
+        font.setBold(True)
+        font.setPointSize(btn_font_size)
+        return font
+
+    @classmethod
+    def set_btn_color(cls):
+        return "background-color: {}; color: {}; ".format(btn_color, btn_font_color)
+
+    @classmethod
     def set_label_param(cls):
         return (120, 20)
+
+    @classmethod
+    def set_logo(cls, frame):
+        logo = QtWidgets.QLabel(frame)
+        logo.setGeometry(5, 5, 90, 90)
+        logo.setStyleSheet("QLabel{{border-image: url({});}}".format('./template/logo.jpg'))
+        # logo.setPixmap((QPixmap(os.path.join(os.getcwd(), os.sep, 'template', os.sep, 'logo.jpg'))))
 
     @classmethod
     def line_widget(cls, frame):
@@ -61,15 +105,7 @@ class CSS:
         line_2.setFrameShadow(QtWidgets.QFrame.Sunken)
         line_2.setObjectName("line_15")
 
-        # pic = QPicture()
-        # lcdNumber = QtWidgets.QLCDNumber(frame)
-        # lcdNumber.setGeometry(QtCore.QRect(10, 10, 101, 81))
-        # lcdNumber.setObjectName("lcdNumber_2")
-
-        # picture = QtWidgets.QLabel(frame)
-        # picture.setGeometry(QtCore.QRect(10, 10, 101, 81))
-        # picture.setAlignment(Qt.AlignCenter)
-        # picture.setPicture(QPicture('photo.jpg'))
+        CSS.set_logo(frame)
 
     def btn_refresh(self, frame):
         _translate = QtCore.QCoreApplication.translate
@@ -193,7 +229,10 @@ class BaseClassWidget(ABC):
         self.listWidget_list.setGeometry(QtCore.QRect(0, 0, self.size, 557))
         self.listWidget_list.setMinimumSize(QtCore.QSize(self.size, 0))
         self.listWidget_list.setMaximumSize(QtCore.QSize(self.size, 16777215))
-        self.listWidget_list.setFont(CSS.set_font())
+        font = QtGui.QFont()
+        font.setPointSize(font_size)
+        font.setBold(bool(font_bold))
+        self.listWidget_list.setFont(font)
         self.listWidget_list.setAutoFillBackground(True)
         self.listWidget_list.setStyleSheet("background-color: rgb(185, 185, 185);")
         self.listWidget_list.setFrameShape(QtWidgets.QFrame.WinPanel)
@@ -213,7 +252,7 @@ class BaseClassWidget(ABC):
         self.frame_btn.setObjectName("frame_btn")
 
         self.btn_pushButton_update = QtWidgets.QPushButton(self.frame_btn)
-        self.btn_pushButton_update.setGeometry(QtCore.QRect(40, 0, 117, 30))
+        self.btn_pushButton_update.setGeometry(QtCore.QRect(70, 0, 117, 30))
         self.btn_pushButton_update.setMaximumSize(QtCore.QSize(16777215, 30))
         self.btn_pushButton_update.setFont(CSS.set_font())
         self.btn_pushButton_update.setAutoFillBackground(False)

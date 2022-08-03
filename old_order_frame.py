@@ -5,9 +5,27 @@ from CSS_template import CSS
 from datetime import datetime
 from dbapi import APIAxiomDB
 from databasecreate import CreateDB
+from CSS_template import CSS
+import configparser
+
+config = configparser.ConfigParser()
+config.read('setting.ini')
+
+font_size = int(config['ORDER']['size_font'])
+try:
+    if int(config['ORDER']['bold']):
+        font_bold = True
+    else:
+        font_bold = False
+except ValueError:
+    font_bold = False
 
 
 class OldOrder:
+    @classmethod
+    def font(cls):
+        pass
+
     def __init__(self):
         self.frame = None
         self.btn_pushButton_data_choice = None
@@ -33,28 +51,31 @@ class OldOrder:
         
     def set_body(self):
         self.btn_pushButton_data_choice = QtWidgets.QPushButton(self.frame)
-        self.btn_pushButton_data_choice.setGeometry(QtCore.QRect(210, 50, 151, 33))
+        self.btn_pushButton_data_choice.setGeometry(QtCore.QRect(200, 50, 170, 33))
         self.btn_pushButton_data_choice.setFont(CSS.set_font(12, True, 75))
-        self.btn_pushButton_data_choice.setStyleSheet("background-color: rgb(85, 170, 0);")
+        self.btn_pushButton_data_choice.setStyleSheet(CSS.set_btn_color())
+        self.btn_pushButton_data_choice.setFont(CSS.set_font_btn())
         self.btn_pushButton_data_choice.setObjectName("btn_pushButton_data_choice")
 
         self.btn_pushButton_order_open = QtWidgets.QPushButton(self.frame)
         self.btn_pushButton_order_open.setGeometry(QtCore.QRect(453, 50, 101, 33))
         self.btn_pushButton_order_open.setFont(CSS.set_font(12, False, 50))
         self.btn_pushButton_order_open.setAutoFillBackground(False)
-        self.btn_pushButton_order_open.setStyleSheet("background-color: rgb(85, 170, 0);")
+        self.btn_pushButton_order_open.setStyleSheet(CSS.set_btn_color())
+        self.btn_pushButton_order_open.setFont(CSS.set_font_btn())
         self.btn_pushButton_order_open.setObjectName("btn_pushButton_order_open")
 
         self.btn_pushButton_print = QtWidgets.QPushButton(self.frame)
         self.btn_pushButton_print.setGeometry(QtCore.QRect(15, 50, 101, 33))
         self.btn_pushButton_print.setFont(CSS.set_font(12, False, 50))
         self.btn_pushButton_print.setAutoFillBackground(False)
-        self.btn_pushButton_print.setStyleSheet("background-color: rgb(85, 170, 0);")
+        self.btn_pushButton_print.setStyleSheet(CSS.set_btn_color())
+        self.btn_pushButton_print.setFont(CSS.set_font_btn())
         self.btn_pushButton_print.setObjectName("btn_pushButton_print")
 
         self.listWidget_list = QtWidgets.QListWidget(self.frame)
         self.listWidget_list.setGeometry(QtCore.QRect(10, 110, 551, 481))
-        self.listWidget_list.setFont(CSS.set_font(11))
+        self.listWidget_list.setFont(CSS.set_font(font_size, font_bold))
         self.listWidget_list.setAutoFillBackground(True)
         self.listWidget_list.setStyleSheet("background-color: rgb(185, 185, 185);")
         self.listWidget_list.setFrameShape(QtWidgets.QFrame.WinPanel)
