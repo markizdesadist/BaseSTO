@@ -1,5 +1,5 @@
 from PyQt5 import QtWidgets, QtCore
-from CSS_template import CSS
+from frame.CSS_template import CSS
 
 
 class MenuBar:

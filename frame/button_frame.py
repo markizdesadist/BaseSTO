@@ -1,9 +1,6 @@
-from PyQt5 import QtWidgets, QtCore, QtGui
-from CSS_template import CSS
-import configparser
-
-config = configparser.ConfigParser()
-config.read('setting.ini')
+from PyQt5 import QtWidgets, QtCore
+from frame.CSS_template import CSS
+from log_setting import config
 
 btn_color = 'green'
 if int(config['HELP']['btn_news']):

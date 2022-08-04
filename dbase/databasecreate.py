@@ -1,10 +1,9 @@
 from peewee import IntegrityError
-
-from dbbaseinit import CompanyDB
-from dbbaseinit import CarDB
-from dbbaseinit import OrderDB
-from dbbaseinit import Driver
-from dbbaseinit import db
+from dbase.dbbaseinit import CompanyDB
+from dbase.dbbaseinit import CarDB
+from dbase.dbbaseinit import OrderDB
+from dbase.dbbaseinit import Driver
+from dbase.dbbaseinit import db
 from datetime import datetime
 from datetime import date
 

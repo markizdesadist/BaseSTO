@@ -1,9 +1,8 @@
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtGui import QFont
 
-from CSS_template import CSS
-from dbapi import APIAxiomDB
-from databasecreate import CreateDB
+from frame.CSS_template import CSS
+from dbase.dbapi import APIAxiomDB
+from dbase.databasecreate import CreateDB
 
 
 class Car:
@@ -127,32 +126,36 @@ class Car:
         self.txt_label_brand.setFont(CSS.set_font())
         self.txt_label_brand.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.txt_label_brand.setObjectName("txt_label_brand")
-        self.txt_label_brand.setPlaceholderText(" Машина")
+        self.txt_label_brand.setPlaceholderText("Машина")
         self.txt_label_brand.setClearButtonEnabled(True)
+        self.txt_label_brand.setTextMargins(CSS.set_margins())
 
         self.txt_label_car_number = QtWidgets.QLineEdit(self.frame)
         self.txt_label_car_number.setGeometry(QtCore.QRect(318, 350, 141, 31))
         self.txt_label_car_number.setFont(CSS.set_font())
         self.txt_label_car_number.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.txt_label_car_number.setObjectName("txt_label_car_number")
-        self.txt_label_car_number.setPlaceholderText(" Номер")
+        self.txt_label_car_number.setPlaceholderText("Номер")
         self.txt_label_car_number.setClearButtonEnabled(True)
+        self.txt_label_car_number.setTextMargins(CSS.set_margins())
 
         self.txt_label_model = QtWidgets.QLineEdit(self.frame)
         self.txt_label_model.setGeometry(QtCore.QRect(128, 390, 331, 31))
         self.txt_label_model.setFont(CSS.set_font())
         self.txt_label_model.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.txt_label_model.setObjectName("txt_label_model")
-        self.txt_label_model.setPlaceholderText(" Модель")
+        self.txt_label_model.setPlaceholderText("Модель")
         self.txt_label_model.setClearButtonEnabled(True)
+        self.txt_label_model.setTextMargins(CSS.set_margins())
 
         self.txt_label_vin_code = QtWidgets.QLineEdit(self.frame)
         self.txt_label_vin_code.setGeometry(QtCore.QRect(128, 430, 425, 31))
         self.txt_label_vin_code.setFont(CSS.set_font())
         self.txt_label_vin_code.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.txt_label_vin_code.setObjectName("txt_label_vin_code")
-        self.txt_label_vin_code.setPlaceholderText(" УЗМ код машины")
+        self.txt_label_vin_code.setPlaceholderText("УЗМ код машины")
         self.txt_label_vin_code.setClearButtonEnabled(True)
+        self.txt_label_vin_code.setTextMargins(CSS.set_margins())
 
         self.set_label()
         self.retranslateUi()

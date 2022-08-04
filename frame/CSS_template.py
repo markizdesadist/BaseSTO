@@ -1,16 +1,11 @@
-import os.path
-
 from PyQt5 import QtGui, QtWidgets, QtCore
 from abc import ABC, abstractmethod
-import logging
 
+from PyQt5.QtCore import QMargins
 from PyQt5.QtGui import QFont
 
-from dbapi import APIAxiomDB
-import configparser
-
-config = configparser.ConfigParser()
-config.read('setting.ini')
+from dbase.dbapi import APIAxiomDB
+from log_setting import config
 
 font_size = int(config['FONT_List_widget']['size_font'])
 try:
@@ -49,6 +44,15 @@ class CSS:
         font.setBold(bold)
         font.setWeight(weight)
         return font
+
+    @classmethod
+    def set_margins(cls):
+        marg = QMargins()
+        marg.setLeft(10)
+        marg.setTop(1)
+        marg.setRight(1)
+        marg.setBottom(1)
+        return marg
 
     @classmethod
     def set_font_btn(cls):
@@ -168,7 +172,7 @@ class BaseClassWidget(ABC):
         # self.size = 280
         self.text = ''
         self.listWidget_list = QtWidgets.QListWidget()
-        self.temp_list = []
+        # self.temp_list = []
         self.query = APIAxiomDB()
 
     def set(self, text):
@@ -208,14 +212,16 @@ class BaseClassWidget(ABC):
         self.frame_label.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_label.setObjectName("frame_label")
 
-        self.label_list = QtWidgets.QLabel(self.frame_label)
-        self.label_list.setGeometry(QtCore.QRect(0, 0, self.size, 30))
-        self.label_list.setMinimumSize(QtCore.QSize(self.size, 30))
-        self.label_list.setMaximumSize(QtCore.QSize(self.size, 30))
+        self.label_list = QtWidgets.QLineEdit(self.frame_label)
+
+        self.completer = QtWidgets.QCompleter(self.temp_list)
+
+        self.label_list.setGeometry(QtCore.QRect(0, 0, 200, 30))
         self.label_list.setFont(CSS.set_font(14))
         self.label_list.setAutoFillBackground(False)
-        self.label_list.setStyleSheet("")
+        self.label_list.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.label_list.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_list.setCompleter(self.completer)
         self.label_list.setObjectName("label_list")
 
         self.frame_listWidget = QtWidgets.QFrame(self.gridLayoutWidget)

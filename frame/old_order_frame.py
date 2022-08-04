@@ -1,15 +1,12 @@
 from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtCore import QDateTime
 
-from CSS_template import CSS
 from datetime import datetime
-from dbapi import APIAxiomDB
-from databasecreate import CreateDB
-from CSS_template import CSS
-import configparser
-
-config = configparser.ConfigParser()
-config.read('setting.ini')
+from dbase.dbapi import APIAxiomDB
+from dbase.databasecreate import CreateDB
+from frame.CSS_template import CSS
+from log_setting import config
+from log_setting import logger
 
 font_size = int(config['ORDER']['size_font'])
 try:
@@ -48,7 +45,8 @@ class OldOrder:
         self.frame.setObjectName("frame")
 
         self.set_body()
-        
+
+    @logger.catch
     def set_body(self):
         self.btn_pushButton_data_choice = QtWidgets.QPushButton(self.frame)
         self.btn_pushButton_data_choice.setGeometry(QtCore.QRect(200, 50, 170, 33))
@@ -58,7 +56,7 @@ class OldOrder:
         self.btn_pushButton_data_choice.setObjectName("btn_pushButton_data_choice")
 
         self.btn_pushButton_order_open = QtWidgets.QPushButton(self.frame)
-        self.btn_pushButton_order_open.setGeometry(QtCore.QRect(453, 50, 101, 33))
+        self.btn_pushButton_order_open.setGeometry(QtCore.QRect(448, 50, 106, 33))
         self.btn_pushButton_order_open.setFont(CSS.set_font(12, False, 50))
         self.btn_pushButton_order_open.setAutoFillBackground(False)
         self.btn_pushButton_order_open.setStyleSheet(CSS.set_btn_color())
@@ -66,7 +64,7 @@ class OldOrder:
         self.btn_pushButton_order_open.setObjectName("btn_pushButton_order_open")
 
         self.btn_pushButton_print = QtWidgets.QPushButton(self.frame)
-        self.btn_pushButton_print.setGeometry(QtCore.QRect(15, 50, 101, 33))
+        self.btn_pushButton_print.setGeometry(QtCore.QRect(15, 50, 106, 33))
         self.btn_pushButton_print.setFont(CSS.set_font(12, False, 50))
         self.btn_pushButton_print.setAutoFillBackground(False)
         self.btn_pushButton_print.setStyleSheet(CSS.set_btn_color())
@@ -131,11 +129,13 @@ class OldOrder:
         self.add_action()
         self.retranslateUi()
 
+    @logger.catch
     def add_action(self):
         self.btn_pushButton_data_choice.clicked.connect(lambda: self.print_old_order())
         self.btn_pushButton_order_open.clicked.connect(lambda: self.open_order())
         self.listWidget_list.clicked.connect(lambda: self.get_text(self.listWidget_list.currentItem()))
 
+    @logger.catch
     def open_order(self):
         upd = CreateDB()
         query = APIAxiomDB()
@@ -144,9 +144,11 @@ class OldOrder:
             upd.close_order(query.get_order_from_id(int(old_order_item[0])), False)
             self.print_old_order()
 
+    @logger.catch
     def get_text(self, item):
         self.item_text = item.text()
 
+    @logger.catch
     def print_old_order(self):
         self.listWidget_list.clear()
         query = APIAxiomDB()
@@ -155,6 +157,7 @@ class OldOrder:
         old_order_item_list = query.get_list_old_order(start=start, end=end)
         self.add_order_to_list(old_order_item_list)
 
+    @logger.catch
     def add_order_to_list(self, list_temp):
         query = APIAxiomDB()
         for old_order_item in list_temp:

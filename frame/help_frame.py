@@ -1,12 +1,9 @@
 from PyQt5 import QtWidgets, QtCore
-import configparser
 
+from frame.CSS_template import CSS
 from PyQt5.QtGui import QFont
 from datetime import datetime
-from CSS_template import CSS
-
-config = configparser.ConfigParser()
-config.read('setting.ini')
+from log_setting import config
 
 text = config['HELP']['help_text']
 font = QFont(config['HELP']['size_font'])
@@ -21,7 +18,7 @@ class Help:
 
     def set_body(self, frame):
         self.frame_help = QtWidgets.QFrame(frame)
-        self.frame_help.setGeometry(QtCore.QRect(0, 0, 571, 593))
+        self.frame_help.setGeometry(QtCore.QRect(15, 5, 571, 593))
         self.frame_help.setAutoFillBackground(True)
         self.frame_help.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame_help.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -80,5 +77,5 @@ class Help:
 
     def save_request(self):
         with open(request, 'a', encoding='utf-8') as file:
-            file.write("{}: {}\n".format(datetime.now(), self.txt_plainTextEdit_request.toPlainText()))
+            file.write("\n{}\n{}: {}\n".format('-'*20, datetime.now(), self.txt_plainTextEdit_request.toPlainText()))
         self.txt_plainTextEdit_request.clear()

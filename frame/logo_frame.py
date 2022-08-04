@@ -1,7 +1,7 @@
 from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtCore import QTimer, QTime, Qt
 
-from CSS_template import CSS
+from frame.CSS_template import CSS
 from datetime import datetime
 
 
@@ -28,7 +28,7 @@ class LogoFrame:
 
 	def set_body(self):
 		self.txt_label_logo = QtWidgets.QLabel(self.frame)
-		self.txt_label_logo.setGeometry(200, 5, 100, 25)
+		self.txt_label_logo.setGeometry(200, 5, 400, 25)
 		self.txt_label_logo.setAlignment(Qt.AlignHCenter)
 		self.txt_label_logo.setFont(CSS.set_font(16, True, 75))
 		self.txt_label_logo.setAutoFillBackground(False)

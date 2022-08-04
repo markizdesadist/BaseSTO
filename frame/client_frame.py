@@ -1,9 +1,8 @@
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtGui import QFont
 
-from CSS_template import CSS
-from dbapi import APIAxiomDB
-from databasecreate import CreateDB
+from frame.CSS_template import CSS
+from dbase.dbapi import APIAxiomDB
+from dbase.databasecreate import CreateDB
 
 
 class Client:
@@ -127,9 +126,10 @@ class Client:
         self.txt_edit_lineEdit_client_name.setGeometry(QtCore.QRect(128, 110, 333, 31))
         self.txt_edit_lineEdit_client_name.setFont(CSS.set_font())
         self.txt_edit_lineEdit_client_name.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.txt_edit_lineEdit_client_name.setPlaceholderText("  Короткое название клиента")
+        self.txt_edit_lineEdit_client_name.setPlaceholderText("Короткое название клиента")
         self.txt_edit_lineEdit_client_name.setObjectName("txt_edit_lineEdit_client_name")
         self.txt_edit_lineEdit_client_name.setClearButtonEnabled(True)
+        self.txt_edit_lineEdit_client_name.setTextMargins(CSS.set_margins())
 
         self.txt_edit_textEdit_client_full_name = QtWidgets.QTextEdit(self.frame)
         self.txt_edit_textEdit_client_full_name.setGeometry(QtCore.QRect(128, 150, 333, 61))
@@ -137,11 +137,9 @@ class Client:
         self.txt_edit_textEdit_client_full_name.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.txt_edit_textEdit_client_full_name.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.txt_edit_textEdit_client_full_name.setTabChangesFocus(True)
-        self.txt_edit_textEdit_client_full_name.setPlaceholderText(
-            "  Полное название клиента"
-        )
+        self.txt_edit_textEdit_client_full_name.setPlaceholderText("Полное название клиента")
         self.txt_edit_textEdit_client_full_name.setObjectName("txt_edit_textEdit_client_full_name")
-        # self.txt_edit_textEdit_client_full_name.overwriteMode()
+        # self.txt_edit_textEdit_client_full_name.setTextMargins(CSS.set_margins())
 
         self.txt_edit_textEdit_client_address = QtWidgets.QTextEdit(self.frame)
         self.txt_edit_textEdit_client_address.setGeometry(QtCore.QRect(128, 220, 421, 61))
@@ -149,8 +147,9 @@ class Client:
         self.txt_edit_textEdit_client_address.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.txt_edit_textEdit_client_address.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.txt_edit_textEdit_client_address.setTabChangesFocus(True)
-        self.txt_edit_textEdit_client_address.setPlaceholderText("  Адрес клиента")
+        self.txt_edit_textEdit_client_address.setPlaceholderText("Адрес клиента")
         self.txt_edit_textEdit_client_address.setObjectName("txt_edit_textEdit_client_address")
+        # self.txt_edit_textEdit_client_address.setTextMargins(CSS.set_margins())
 
         self.txt_edit_lineEdit_client_identification_number = QtWidgets.QLineEdit(self.frame)
         self.txt_edit_lineEdit_client_identification_number.setGeometry(QtCore.QRect(128, 350, 333, 31))
@@ -158,24 +157,27 @@ class Client:
         self.txt_edit_lineEdit_client_identification_number.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.txt_edit_lineEdit_client_identification_number.setObjectName(
             "txt_edit_lineEdit_client_identification_number")
-        self.txt_edit_lineEdit_client_identification_number.setPlaceholderText("  УНП клиента")
+        self.txt_edit_lineEdit_client_identification_number.setPlaceholderText("УНП клиента")
         self.txt_edit_lineEdit_client_identification_number.setClearButtonEnabled(True)
+        self.txt_edit_lineEdit_client_identification_number.setTextMargins(CSS.set_margins())
 
         self.txt_edit_lineEdit_client_phone = QtWidgets.QLineEdit(self.frame)
         self.txt_edit_lineEdit_client_phone.setGeometry(QtCore.QRect(128, 390, 333, 31))
         self.txt_edit_lineEdit_client_phone.setFont(CSS.set_font())
         self.txt_edit_lineEdit_client_phone.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.txt_edit_lineEdit_client_phone.setObjectName("txt_edit_lineEdit_client_phone")
-        self.txt_edit_lineEdit_client_phone.setPlaceholderText("  городские номера телефонов клиента")
+        self.txt_edit_lineEdit_client_phone.setPlaceholderText("городские номера телефонов клиента")
         self.txt_edit_lineEdit_client_phone.setClearButtonEnabled(True)
+        self.txt_edit_lineEdit_client_phone.setTextMargins(CSS.set_margins())
 
         self.txt_edit_lineEdit_client_mobile_phone = QtWidgets.QLineEdit(self.frame)
         self.txt_edit_lineEdit_client_mobile_phone.setGeometry(QtCore.QRect(128, 430, 425, 31))
         self.txt_edit_lineEdit_client_mobile_phone.setFont(CSS.set_font())
         self.txt_edit_lineEdit_client_mobile_phone.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.txt_edit_lineEdit_client_mobile_phone.setObjectName("txt_edit_lineEdit_client_mobile_phone")
-        self.txt_edit_lineEdit_client_mobile_phone.setPlaceholderText("  мобильный номер телефона клиента")
+        self.txt_edit_lineEdit_client_mobile_phone.setPlaceholderText("мобильный номер телефона клиента")
         self.txt_edit_lineEdit_client_mobile_phone.setClearButtonEnabled(True)
+        self.txt_edit_lineEdit_client_mobile_phone.setTextMargins(CSS.set_margins())
 
     def set_label(self):
         self.label_client_identification_number = QtWidgets.QLabel(self.frame)

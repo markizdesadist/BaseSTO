@@ -2,10 +2,8 @@ import os.path
 
 from peewee import *
 from datetime import datetime
-import configparser
-
-config = configparser.ConfigParser()
-config.read('setting.ini')
+from log_setting import config
+from log_setting import logger
 
 if os.path.exists(config['BASE']['specified_db']):
     db = SqliteDatabase(config['BASE']['db'])

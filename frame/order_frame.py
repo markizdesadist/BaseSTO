@@ -1,12 +1,12 @@
 from PyQt5 import QtWidgets, QtCore
-from PyQt5.QtGui import QFont
 
-from CSS_template import CSS
-from dbapi import APIAxiomDB
-from databasecreate import CreateDB
+from frame.CSS_template import CSS
+from dbase.dbapi import APIAxiomDB
+from dbase.databasecreate import CreateDB
 from datetime import datetime
 import os.path
 from doc_parser import CreateFile
+from log_setting import logger
 
 
 class Order:
@@ -41,6 +41,7 @@ class Order:
 		self.label_order_number = QtWidgets.QLabel(self.frame)
 		self.label_order_number_sep = QtWidgets.QLabel(self.frame)
 		self.label_client_identification_number = QtWidgets.QLabel(self.frame)
+		self.driver_item = []
 
 		self.dict_label = {
 			'brand': self.txt_label_brand,
@@ -74,8 +75,9 @@ class Order:
 		self.txt_edit_lineEdit_client_owner_name.setAutoFillBackground(True)
 		self.txt_edit_lineEdit_client_owner_name.setClearButtonEnabled(True)
 		self.txt_edit_lineEdit_client_owner_name.setStyleSheet("background-color: rgb(255, 255, 255);")
-		self.txt_edit_lineEdit_client_owner_name.setPlaceholderText("  ФИО заказчика")
+		self.txt_edit_lineEdit_client_owner_name.setPlaceholderText("ФИО заказчика")
 		self.txt_edit_lineEdit_client_owner_name.setObjectName("txt_edit_lineEdit_client_owner_name")
+		self.txt_edit_lineEdit_client_owner_name.setTextMargins(CSS.set_margins())
 
 		self.txt_label_order_number = QtWidgets.QLabel(self.frame)
 		self.txt_label_order_number.setGeometry(QtCore.QRect(228, 48, 96, 30))
@@ -139,8 +141,9 @@ class Order:
 		self.txt_edit_lineEdit_client_job_title.setAutoFillBackground(True)
 		self.txt_edit_lineEdit_client_job_title.setStyleSheet("background-color: rgb(255, 255, 255);")
 		self.txt_edit_lineEdit_client_job_title.setObjectName("txt_edit_lineEdit_client_job_title")
-		self.txt_edit_lineEdit_client_job_title.setPlaceholderText("  Должность заказчика")
+		self.txt_edit_lineEdit_client_job_title.setPlaceholderText("Должность заказчика")
 		self.txt_edit_lineEdit_client_job_title.setClearButtonEnabled(True)
+		self.txt_edit_lineEdit_client_job_title.setTextMargins(CSS.set_margins())
 
 		self.txt_label_vin_code = QtWidgets.QLabel(self.frame)
 		self.txt_label_vin_code.setGeometry(QtCore.QRect(128, 430, 425, 30))
@@ -167,9 +170,11 @@ class Order:
 		# CSS.set_logo(self.frame)
 
 	@classmethod
+	@logger.catch
 	def clear_txt(cls, txt):
 		txt.clear()
 
+	@logger.catch
 	def add_action(self):
 		self.btn_pushButton_car_part_choice.clicked.connect(lambda: self.part_choice())
 		self.btn_pushButton_car_car_choice.clicked.connect(lambda: self.car_choice())
@@ -179,6 +184,7 @@ class Order:
 	# self.txt_edit_lineEdit_client_owner_name.mousePressEvent(
 	#         self.txt_edit_lineEdit_client_owner_name)
 
+	@logger.catch
 	def print(self):
 		new = CreateDB()
 		query = APIAxiomDB()
@@ -284,7 +290,7 @@ class Order:
 
 		CreateFile(context_dict)
 
-
+	@logger.catch
 	def refresh(self):
 		query = APIAxiomDB()
 		self.txt_label_order_number.setText(str(query.count_act() + 1))
@@ -306,6 +312,7 @@ class Order:
 
 		self.current_id = None
 
+	@logger.catch
 	def part_choice(self):
 		"""Действие, при нажатии кнопки 'Запчасти'."""
 
@@ -320,6 +327,7 @@ class Order:
 		self.btn_pushButton_car_part_choice.setStyleSheet("background-color: rgb(199, 170, 199);")
 		self.btn_pushButton_car_car_choice.setStyleSheet("background-color: rgb(85, 170, 0);")
 
+	@logger.catch
 	def car_choice(self):
 		"""Действие, при нажатии кнопки 'Машина'."""
 
@@ -343,9 +351,11 @@ class Order:
 		except Exception as err:
 			print(err)
 
+	@logger.catch
 	def get_fields_car(self):
 		pass
 
+	@logger.catch
 	def set_btn(self):
 		self.btn_pushButton_refresh = QtWidgets.QPushButton(self.frame)
 		self.btn_pushButton_refresh.setGeometry(QtCore.QRect(453, 480, 101, 33))
@@ -423,6 +433,7 @@ class Order:
 		self.checkBox_4_internal_consumption.setChecked(True)
 		self.checkBox_4_internal_consumption.setObjectName("checkBox_4_internal_consumption")
 
+	@logger.catch
 	def set_datetime(self):
 		self.frame_data = QtWidgets.QFrame(self.frame)
 		self.frame_data.setGeometry(QtCore.QRect(130, 0, 421, 51))

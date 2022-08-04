@@ -1,10 +1,9 @@
 from typing import Any
 
-from dbbaseinit import CompanyDB
-from dbbaseinit import CarDB
-from dbbaseinit import OrderDB, Driver
-from dbbaseinit import db
-from databasecreate import CreateDB
+from dbase.dbbaseinit import CompanyDB
+from dbase.dbbaseinit import CarDB
+from dbase.dbbaseinit import OrderDB, Driver
+from dbase.dbbaseinit import db
 
 
 class APIAxiomDB:
@@ -82,7 +81,7 @@ class APIAxiomDB:
 				temp.vin_code,
 				temp.company_id
 			]
-			return temp
+			return temp_list
 
 	@classmethod
 	def get_list_company(cls) -> list:
@@ -244,6 +243,14 @@ class APIAxiomDB:
 				temp_list.append(elem.name)
 		return temp_list
 
+	@classmethod
+	def get_list_driver_for_company(cls, num):
+		temp_list = []
+		with db:
+			for elem in Driver.select().where(Driver.id == CompanyDB.get(CompanyDB.id == num)):
+				temp_list.append(elem.name)
+		return temp_list
+
 
 if __name__ == '__main__':
 	pass
@@ -262,7 +269,8 @@ if __name__ == '__main__':
 	# new_act = APIAxiomDB()
 	# a = new_act.get_list_driver()
 	# print(a)
-	# print('b' in a)
+	# b = new_act.get_list_driver_for_company(2)
+	# print(b)
 # print(new_act.count_act())
 
 # a = new_act.get_client_from_order(1)
